@@ -8,4 +8,4 @@ nixPkgs = ["nodejs_22"]
 cmds = ["cd backend && npm install"]
 
 [start]
-cmd = "cd backend && node src/server.js"
+cmd = "node backend/src/server.js"
