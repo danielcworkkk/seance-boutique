@@ -168,7 +168,10 @@
           <span class="product-price text-sm sm:text-base font-black whitespace-nowrap"></span>
         </div>
         <div class="mt-3 flex flex-wrap gap-1.5 product-sizes"></div>
-        <div class="mt-4 flex gap-2">
+        <div class="mt-3">
+          <select class="product-size-select w-full rounded-full border border-neutral-300 px-3 py-2 text-xs font-semibold bg-white"></select>
+        </div>
+        <div class="mt-3 flex gap-2">
           <button class="product-add flex-1 rounded-full bg-neutral-900 text-white py-2.5 text-[11px] sm:text-xs font-semibold uppercase tracking-[0.2em]">加入購物袋</button>
           <a href="/buyer.html" class="rounded-full border border-neutral-300 px-3 py-2.5 text-[11px] sm:text-xs font-semibold uppercase tracking-[0.2em]" data-i18n="goBuyerHub">前往結帳頁</a>
         </div>
@@ -186,14 +189,14 @@
         signIn: '登入',
         signOut: '登出',
         buyerHub: '結帳與訂單',
-        bag: '購物袋',
+        bag: '加入購物袋',
         heroTag: '互動直播',
         heroTitle: '本場直播焦點',
         heroBody: '參考精品電商首頁做法，首頁只專注在直播內容與商品探索，結帳與訂單分流至獨立頁面，減少資訊干擾。',
         watchLive: '觀看直播',
         goBuyerHub: '前往結帳頁',
         productLabel: '直播商品',
-        productTitle: 'Live Product Grid',
+        productTitle: '直播商品清單',
         allSizes: '全部尺碼',
         newest: '最新優先',
         lowHigh: '價格：低到高',
@@ -229,7 +232,7 @@
         signIn: 'Sign in',
         signOut: 'Sign out',
         buyerHub: 'Checkout & Orders',
-        bag: 'Bag',
+        bag: 'Add to Bag',
         heroTag: 'Interactive live',
         heroTitle: 'Live stream spotlight',
         heroBody: 'Inspired by top commerce homes, this page keeps only live storytelling and product discovery. Checkout and tracking are moved to a dedicated tab.',
@@ -287,7 +290,8 @@
     }
 
     async function api(path, options) {
-      const response = await fetch(path, {
+      const base = window.API_BASE_URL !== undefined ? window.API_BASE_URL : '';
+      const response = await fetch(base + path, {
         headers: { 'Content-Type': 'application/json' },
         ...options
       });
@@ -539,29 +543,48 @@
       drawer.classList.toggle('translate-x-full', !open);
     }
 
+    function getSelectedProductSize(cardEl) {
+      const select = cardEl.querySelector('.product-size-select');
+      return select ? select.value : '';
+    }
+
     function addToCart(product) {
-      const existing = state.cart.find((item) => item.id === product.id);
+      // find the card element for this product to get selected size
+      const cards = document.querySelectorAll('#products-grid > div');
+      let selectedSize = '';
+      for (const card of cards) {
+        if (card._product && card._product.id === product.id) {
+          selectedSize = getSelectedProductSize(card);
+          break;
+        }
+      }
+      if (!selectedSize && product.sizes && product.sizes.length) {
+        selectedSize = product.sizes[0];
+      }
+
+      const cartKey = product.id + '-' + selectedSize;
+      const existing = state.cart.find((item) => item.cartKey === cartKey);
       if (existing) {
         existing.qty += 1;
       } else {
-        state.cart.push({ ...product, qty: 1 });
+        state.cart.push({ ...product, qty: 1, selectedSize, cartKey });
       }
       persistCart();
       renderCart();
       toggleCart(true);
     }
 
-    function changeQty(id, delta) {
-      const item = state.cart.find((entry) => entry.id === id);
+    function changeQty(cartKey, delta) {
+      const item = state.cart.find((entry) => entry.cartKey === cartKey);
       if (!item) return;
       item.qty += delta;
-      if (item.qty <= 0) state.cart = state.cart.filter((entry) => entry.id !== id);
+      if (item.qty <= 0) state.cart = state.cart.filter((entry) => entry.cartKey !== cartKey);
       persistCart();
       renderCart();
     }
 
-    function removeFromCart(id) {
-      state.cart = state.cart.filter((item) => item.id !== id);
+    function removeFromCart(cartKey) {
+      state.cart = state.cart.filter((item) => item.cartKey !== cartKey);
       persistCart();
       renderCart();
     }
@@ -587,17 +610,17 @@
               <div class="flex items-start justify-between gap-2">
                 <div>
                   <p class="text-xs font-bold uppercase leading-5">${getProductDisplayName(item)}</p>
-                  <p class="text-[11px] text-neutral-500 mt-1">${item.sizes.join(', ')}</p>
+                  <p class="text-[11px] text-neutral-500 mt-1">${item.selectedSize || item.sizes.join(', ')}</p>
                 </div>
                 <p class="text-sm font-black">${money(item.price)}</p>
               </div>
               <div class="mt-3 flex items-center justify-between">
                 <div class="inline-flex rounded-full border border-neutral-300 overflow-hidden text-sm">
-                  <button class="px-3 py-1" onclick="changeQty(${item.id}, -1)">-</button>
+                  <button class="px-3 py-1" onclick="changeQty('${item.cartKey}', -1)">-</button>
                   <span class="px-3 py-1 border-l border-r border-neutral-300">${item.qty}</span>
-                  <button class="px-3 py-1" onclick="changeQty(${item.id}, 1)">+</button>
+                  <button class="px-3 py-1" onclick="changeQty('${item.cartKey}', 1)">+</button>
                 </div>
-                <button class="text-[11px] uppercase tracking-[0.2em] font-semibold text-neutral-500" onclick="removeFromCart(${item.id})">Remove</button>
+                <button class="text-[11px] uppercase tracking-[0.2em] font-semibold text-neutral-500" onclick="removeFromCart('${item.cartKey}')">Remove</button>
               </div>
             </div>
           </div>
@@ -634,8 +657,13 @@
         node.querySelector('.product-desc').textContent = productName;
         node.querySelector('.product-price').textContent = money(product.price);
         node.querySelector('.product-sizes').innerHTML = product.sizes.map((size) => `<span class="px-2 py-1 rounded-full border border-neutral-300 text-[10px] uppercase tracking-[0.2em] font-bold">${size}</span>`).join('');
+        const sizeSelect = node.querySelector('.product-size-select');
+        if (sizeSelect && product.sizes.length) {
+          sizeSelect.innerHTML = product.sizes.map((size) => `<option value="${size}">${size}</option>`).join('');
+        }
         node.querySelector('.product-add').textContent = t('bag');
         node.querySelector('.product-add').addEventListener('click', () => addToCart(product));
+        node._product = product;
         grid.appendChild(node);
       });
     }
