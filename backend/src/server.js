@@ -11,9 +11,11 @@ const jwt = require("jsonwebtoken");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
-const STORE_FILE = path.join(__dirname, "..", "data", "store.json");
-const FRONTEND_DIR = path.join(__dirname, "..", "..", "frontend");
-const UPLOADS_DIR = path.join(__dirname, "..", "uploads");
+const BACKEND_DIR = path.resolve(__dirname, "..");
+const PROJECT_DIR = path.resolve(BACKEND_DIR, "..");
+const STORE_FILE = path.join(BACKEND_DIR, "data", "store.json");
+const FRONTEND_DIR = path.join(PROJECT_DIR, "frontend");
+const UPLOADS_DIR = path.join(BACKEND_DIR, "uploads");
 const EMAIL_CODE_TTL_MS = 10 * 60 * 1000;
 const emailCodeStore = new Map();
 
