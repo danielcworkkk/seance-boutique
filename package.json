@@ -1,0 +1,13 @@
+{
+  "name": "seance-boutique",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SEANCE Boutique - Full Stack",
+  "scripts": {
+    "start": "node backend/src/server.js",
+    "postinstall": "cd backend && npm install"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
