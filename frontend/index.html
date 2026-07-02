@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SÉANCE - Live Storefront</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet" />
+  <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+  <script src="/firebase-config.js"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .serif { font-family: 'Playfair Display', serif; }
+    .bg-canvas {
+      background:
+        radial-gradient(circle at 12% 8%, rgba(251, 207, 232, 0.35), transparent 26%),
+        radial-gradient(circle at 90% 2%, rgba(186, 230, 253, 0.35), transparent 28%),
+        linear-gradient(180deg, #fff9f4 0%, #f3eee6 44%, #ece5da 100%);
+    }
+    .glass { backdrop-filter: blur(14px); background: rgba(255,255,255,0.78); }
+    .card-shadow { box-shadow: 0 24px 70px rgba(31, 41, 55, 0.12); }
+    .scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .scrollbar::-webkit-scrollbar-thumb { background: #111827; border-radius: 999px; }
+    .scrollbar::-webkit-scrollbar-track { background: rgba(17, 24, 39, 0.08); }
+    .pulse { animation: pulse 1.4s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{ opacity:1 } 50%{ opacity:.35 } }
+  </style>
+</head>
+<body class="bg-canvas text-neutral-900 min-h-screen">
+  <div class="bg-black text-white text-[10px] sm:text-xs tracking-[0.28em] uppercase">
+    <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-center gap-2">
+      <span class="h-2 w-2 rounded-full bg-red-500 pulse"></span>
+      <span data-i18n="topBanner">互動直播進行中，精選款式即時上架。</span>
+    </div>
+  </div>
+
+  <header class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5">
+    <nav class="glass card-shadow border border-white/60 rounded-[1.75rem] px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
+      <div class="min-w-0">
+        <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" class="text-left">
+          <p class="serif text-2xl sm:text-3xl font-semibold leading-none">SÉANCE</p>
+          <p class="text-[9px] tracking-[0.35em] uppercase text-neutral-500 mt-1" data-i18n="brandSub">Live Boutique</p>
+        </button>
+      </div>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button id="lang-toggle" class="px-3 py-2 rounded-full border border-neutral-300 bg-white text-sm font-semibold hover:bg-neutral-50">中文 / EN</button>
+        <button id="account-button" onclick="openAccountModal()" class="hidden sm:inline-flex px-3 py-2 rounded-full border border-neutral-300 bg-white text-sm font-semibold hover:bg-neutral-50" data-i18n="signIn">登入</button>
+        <a href="/buyer.html" class="px-3.5 py-2 rounded-full bg-black text-white text-sm font-semibold hover:bg-neutral-800" data-i18n="buyerHub">結帳與訂單</a>
+        <button onclick="toggleCart(true)" class="relative px-3 py-2 rounded-full border border-neutral-300 bg-white text-sm font-semibold hover:bg-neutral-50">
+          <i class="fa-solid fa-bag-shopping mr-2"></i><span data-i18n="bag">購物袋</span>
+          <span id="cart-count" class="ml-2 inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full bg-black text-white text-[10px] font-black">0</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+    <section class="mt-6">
+      <div class="card-shadow rounded-[2rem] border border-white/60 overflow-hidden relative min-h-[420px]">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&q=80')"></div>
+        <div class="absolute inset-0 bg-gradient-to-tr from-black/65 via-black/35 to-transparent"></div>
+        <div class="relative p-7 sm:p-10 lg:p-12 h-full text-white flex flex-col justify-between">
+          <div>
+            <span class="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] bg-red-600/90 px-3 py-1 rounded-full font-bold" data-i18n="heroTag">互動直播</span>
+            <h1 class="serif mt-6 text-5xl sm:text-6xl lg:text-7xl leading-[0.95]" data-i18n="heroTitle">本場直播焦點</h1>
+            <p class="max-w-xl mt-4 text-sm sm:text-base leading-7 text-white/88" data-i18n="heroBody">參考精品電商首頁做法，首頁只專注在直播內容與商品探索，結帳與訂單分流至獨立頁面，減少資訊干擾。</p>
+          </div>
+          <div class="flex flex-wrap gap-3 mt-8">
+            <a href="https://facebook.com" target="_blank" rel="noreferrer" class="px-5 py-3 rounded-full bg-white text-black font-semibold text-sm">
+              <i class="fa-brands fa-facebook mr-2"></i><span data-i18n="watchLive">觀看直播</span>
+            </a>
+            <a href="/buyer.html" class="px-5 py-3 rounded-full border border-white/50 text-white font-semibold text-sm" data-i18n="goBuyerHub">前往結帳頁</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="catalog" class="mt-8 card-shadow glass rounded-[2rem] border border-white/60 p-5 sm:p-7">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+        <div>
+          <p class="text-[10px] tracking-[0.3em] uppercase text-neutral-500 font-bold" data-i18n="productLabel">直播商品</p>
+          <h2 class="text-3xl font-black mt-2" data-i18n="productTitle">Live Product Grid</h2>
+        </div>
+        <div class="flex gap-3">
+          <select id="filter-size" onchange="renderProducts()" class="rounded-full border border-neutral-300 bg-white px-4 py-2 text-sm">
+            <option value="" data-i18n="allSizes">全部尺碼</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+          </select>
+          <select id="sort-price" onchange="renderProducts()" class="rounded-full border border-neutral-300 bg-white px-4 py-2 text-sm">
+            <option value="newest" data-i18n="newest">最新優先</option>
+            <option value="low-high" data-i18n="lowHigh">價格：低到高</option>
+            <option value="high-low" data-i18n="highLow">價格：高到低</option>
+          </select>
+        </div>
+      </div>
+      <div id="products-grid" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5"></div>
+    </section>
+  </main>
+
+  <div id="account-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/55 px-4">
+    <div class="glass card-shadow w-full max-w-md rounded-[2rem] border border-white/60 p-6 sm:p-7">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="text-[10px] uppercase tracking-[0.3em] text-neutral-500 font-bold" data-i18n="accountTitle">顧客登入</p>
+          <h3 class="text-2xl font-black mt-2" data-i18n="accountHeadline">儲存聯絡資料</h3>
+        </div>
+        <button onclick="closeAccountModal()" class="text-neutral-500 hover:text-black"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <form id="account-form" class="mt-6 space-y-4">
+        <div>
+          <label class="block text-[10px] uppercase tracking-[0.3em] text-neutral-500 font-bold mb-1" data-i18n="fullName">姓名</label>
+          <input id="customer-name" type="text" class="w-full rounded-2xl border border-neutral-300 px-4 py-3 text-sm outline-none focus:border-black" data-i18n-placeholder="namePlaceholder" placeholder="你的姓名" />
+        </div>
+        <div>
+          <label class="block text-[10px] uppercase tracking-[0.3em] text-neutral-500 font-bold mb-1" data-i18n="emailLabel">電郵</label>
+          <input id="customer-email" type="email" required class="w-full rounded-2xl border border-neutral-300 px-4 py-3 text-sm outline-none focus:border-black" data-i18n-placeholder="emailPlaceholder" placeholder="name@example.com" />
+        </div>
+        <div>
+          <label class="block text-[10px] uppercase tracking-[0.3em] text-neutral-500 font-bold mb-1" data-i18n="phoneLabel">電話</label>
+          <input id="customer-phone" type="tel" class="w-full rounded-2xl border border-neutral-300 px-4 py-3 text-sm outline-none focus:border-black" data-i18n-placeholder="phonePlaceholder" placeholder="+852 9000 0000" />
+        </div>
+        <div>
+          <label class="block text-[10px] uppercase tracking-[0.3em] text-neutral-500 font-bold mb-1" data-i18n="passwordLabel">密碼</label>
+          <input id="customer-password" type="password" minlength="6" class="w-full rounded-2xl border border-neutral-300 px-4 py-3 text-sm outline-none focus:border-black" data-i18n-placeholder="passwordPlaceholder" placeholder="至少 6 位數" />
+        </div>
+        <div class="flex items-center justify-between gap-3">
+          <button type="submit" class="flex-1 rounded-2xl bg-black text-white py-3 font-semibold" data-i18n="authSubmit">註冊 / 登入</button>
+          <button id="send-verify-btn" type="button" class="rounded-2xl border border-neutral-300 bg-white px-4 py-3 font-semibold" data-i18n="sendVerifyEmail">發送驗證信</button>
+          <button type="button" onclick="logoutCustomer()" class="rounded-2xl border border-neutral-300 bg-white px-4 py-3 font-semibold" data-i18n="signOut">登出</button>
+        </div>
+      </form>
+      <p id="account-status" class="mt-4 text-sm text-neutral-600"></p>
+    </div>
+  </div>
+
+  <div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-black/40 hidden z-40"></div>
+  <aside id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md translate-x-full transition-transform duration-300 z-50 bg-white shadow-2xl flex flex-col">
+    <div class="p-5 border-b border-neutral-200 flex items-center justify-between bg-neutral-50">
+      <div>
+        <p class="text-[10px] uppercase tracking-[0.3em] text-neutral-500 font-bold" data-i18n="bag">購物袋</p>
+        <h3 class="text-xl font-black mt-1"><span id="cart-items-count">0</span> <span data-i18n="items">件</span></h3>
+      </div>
+      <button onclick="toggleCart(false)" class="text-neutral-500 hover:text-black"><i class="fa-solid fa-xmark text-lg"></i></button>
+    </div>
+    <div id="cart-items" class="flex-1 overflow-auto p-5 space-y-4 scrollbar"></div>
+    <div class="p-5 border-t border-neutral-200 space-y-3 bg-neutral-50">
+      <div class="flex items-center justify-between text-sm font-semibold">
+        <span data-i18n="subtotal">小計</span>
+        <span id="cart-total">$0.00</span>
+      </div>
+      <a href="/buyer.html" class="block w-full rounded-2xl bg-black text-white py-3 font-semibold text-center" data-i18n="goBuyerHub">前往結帳頁</a>
+    </div>
+  </aside>
+
+  <template id="product-template">
+    <article class="rounded-[1.4rem] border border-neutral-200 bg-white overflow-hidden shadow-[0_14px_40px_rgba(15,23,42,0.08)] flex flex-col">
+      <div class="relative aspect-[3/4] bg-neutral-100 overflow-hidden">
+        <img class="product-photo w-full h-full object-cover" alt="Product photo" />
+        <div class="absolute top-3 left-3 text-[10px] uppercase tracking-[0.22em] bg-black text-white rounded-full px-2.5 py-1 font-bold product-time"></div>
+      </div>
+      <div class="p-4 flex-1 flex flex-col">
+        <div class="flex items-start justify-between gap-2">
+          <h3 class="product-desc text-xs sm:text-sm font-bold uppercase tracking-wide leading-5"></h3>
+          <span class="product-price text-sm sm:text-base font-black whitespace-nowrap"></span>
+        </div>
+        <div class="mt-3 flex flex-wrap gap-1.5 product-sizes"></div>
+        <div class="mt-4 flex gap-2">
+          <button class="product-add flex-1 rounded-full bg-neutral-900 text-white py-2.5 text-[11px] sm:text-xs font-semibold uppercase tracking-[0.2em]">加入購物袋</button>
+          <a href="/buyer.html" class="rounded-full border border-neutral-300 px-3 py-2.5 text-[11px] sm:text-xs font-semibold uppercase tracking-[0.2em]" data-i18n="goBuyerHub">前往結帳頁</a>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <script>
+    const STORAGE_CART = 'boutique-cart';
+
+    const translations = {
+      zh: {
+        topBanner: '互動直播進行中，精選款式即時上架。',
+        brandSub: 'Live Boutique',
+        signIn: '登入',
+        signOut: '登出',
+        buyerHub: '結帳與訂單',
+        bag: '購物袋',
+        heroTag: '互動直播',
+        heroTitle: '本場直播焦點',
+        heroBody: '參考精品電商首頁做法，首頁只專注在直播內容與商品探索，結帳與訂單分流至獨立頁面，減少資訊干擾。',
+        watchLive: '觀看直播',
+        goBuyerHub: '前往結帳頁',
+        productLabel: '直播商品',
+        productTitle: 'Live Product Grid',
+        allSizes: '全部尺碼',
+        newest: '最新優先',
+        lowHigh: '價格：低到高',
+        highLow: '價格：高到低',
+        subtotal: '小計',
+        items: '件',
+        accountTitle: '顧客登入',
+        accountHeadline: '儲存聯絡資料',
+        fullName: '姓名',
+        emailLabel: '電郵',
+        phoneLabel: '電話',
+        passwordLabel: '密碼',
+        emailPlaceholder: 'name@example.com',
+        phonePlaceholder: '+852 9000 0000',
+        passwordPlaceholder: '至少 6 位數',
+        namePlaceholder: '你的姓名',
+        authSubmit: '註冊 / 登入',
+        sendVerifyEmail: '發送驗證信',
+        emptyBag: '購物袋目前沒有商品。',
+        enterEmail: '請先輸入電郵。',
+        enterPassword: '請輸入至少 6 位數密碼。',
+        firebaseMissing: 'Firebase 尚未設定。請先填好 firebase-config.js。',
+        signupSuccessVerify: '已建立帳號，請到電郵收取驗證信後再登入。',
+        verifyEmailFirst: '請先到信箱完成電郵驗證。',
+        signInSuccess: '登入成功。',
+        verifyEmailSent: '驗證信已發送，請查看收件箱。',
+        profileSaveFailed: '已登入，但儲存會員資料失敗，請稍後再試。',
+        authFailed: '登入或註冊失敗，請檢查帳號密碼。'
+      },
+      en: {
+        topBanner: 'Interactive live is on. Curated pieces are dropping now.',
+        brandSub: 'Live Boutique',
+        signIn: 'Sign in',
+        signOut: 'Sign out',
+        buyerHub: 'Checkout & Orders',
+        bag: 'Bag',
+        heroTag: 'Interactive live',
+        heroTitle: 'Live stream spotlight',
+        heroBody: 'Inspired by top commerce homes, this page keeps only live storytelling and product discovery. Checkout and tracking are moved to a dedicated tab.',
+        watchLive: 'Watch live',
+        goBuyerHub: 'Go to buyer hub',
+        productLabel: 'Live products',
+        productTitle: 'Live Product Grid',
+        allSizes: 'All sizes',
+        newest: 'Newest',
+        lowHigh: 'Low to high',
+        highLow: 'High to low',
+        subtotal: 'Subtotal',
+        items: 'items',
+        accountTitle: 'Customer sign in',
+        accountHeadline: 'Save your contact details',
+        fullName: 'Name',
+        emailLabel: 'Email',
+        phoneLabel: 'Phone',
+        passwordLabel: 'Password',
+        emailPlaceholder: 'name@example.com',
+        phonePlaceholder: '+852 9000 0000',
+        passwordPlaceholder: 'At least 6 characters',
+        namePlaceholder: 'Your name',
+        authSubmit: 'Sign up / Sign in',
+        sendVerifyEmail: 'Send verify email',
+        emptyBag: 'No items in your bag yet.',
+        enterEmail: 'Please enter email first.',
+        enterPassword: 'Please enter a password with at least 6 characters.',
+        firebaseMissing: 'Firebase is not configured yet. Please update firebase-config.js first.',
+        signupSuccessVerify: 'Account created. Please verify your email before signing in.',
+        verifyEmailFirst: 'Please verify your email first.',
+        signInSuccess: 'Signed in successfully.',
+        verifyEmailSent: 'Verification email sent. Please check your inbox.',
+        profileSaveFailed: 'Signed in but failed to save profile. Please try again later.',
+        authFailed: 'Sign-in or sign-up failed. Please check your email and password.'
+      }
+    };
+
+    const state = {
+      lang: localStorage.getItem('boutique-lang') || 'zh',
+      customer: null,
+      products: [],
+      cart: JSON.parse(localStorage.getItem(STORAGE_CART) || '[]')
+    };
+
+    let firebaseApp = null;
+    let firebaseAuth = null;
+
+    function t(key) {
+      return translations[state.lang][key] || translations.zh[key] || key;
+    }
+
+    function persistCart() {
+      localStorage.setItem(STORAGE_CART, JSON.stringify(state.cart));
+    }
+
+    async function api(path, options) {
+      const response = await fetch(path, {
+        headers: { 'Content-Type': 'application/json' },
+        ...options
+      });
+      if (!response.ok) throw new Error(await response.text());
+      return response.status === 204 ? null : response.json();
+    }
+
+    function applyLanguage() {
+      document.documentElement.lang = state.lang === 'zh' ? 'zh-Hant' : 'en';
+      document.querySelectorAll('[data-i18n]').forEach((node) => {
+        node.textContent = t(node.dataset.i18n);
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach((node) => {
+        node.placeholder = t(node.dataset.i18nPlaceholder);
+      });
+      syncAccountButton();
+      renderCart();
+      renderProducts();
+    }
+
+    function money(amount) {
+      return `$${Number(amount).toFixed(2)}`;
+    }
+
+    function getProductDisplayName(product) {
+      if (!product) return '';
+      if (state.lang === 'zh') {
+        return product.nameZh || product.nameEn || product.desc || '';
+      }
+      return product.nameEn || product.nameZh || product.desc || '';
+    }
+
+    function setAccountStatus(message) {
+      document.getElementById('account-status').textContent = message || '';
+    }
+
+    function getFirebaseAuth() {
+      if (firebaseAuth) return firebaseAuth;
+      const config = window.FIREBASE_CONFIG;
+      if (!config || !config.apiKey || !window.firebase || !window.firebase.auth) {
+        return null;
+      }
+      firebaseApp = firebase.initializeApp(config);
+      firebaseAuth = firebase.auth();
+      return firebaseAuth;
+    }
+
+    async function persistCustomerProfileFromAuth(user, formValues = {}) {
+      if (!user || !user.email) return null;
+      const payload = {
+        email: user.email,
+        name: formValues.name || user.displayName || '',
+        phone: formValues.phone || '',
+        language: state.lang
+      };
+
+      const customer = await api('/api/users/profile', {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      });
+
+      state.customer = customer;
+      localStorage.setItem('boutique-customer-email', customer.email);
+      setAccountStatus(`${customer.email}${customer.phone ? ` • ${customer.phone}` : ''}`);
+      syncAccountButton();
+      return customer;
+    }
+
+    function syncAccountButton() {
+      const button = document.getElementById('account-button');
+      if (!button) return;
+
+      if (state.customer) {
+        const label = state.customer.name || state.customer.email;
+        button.textContent = label;
+        button.classList.add('max-w-[180px]', 'truncate');
+        button.title = `${state.customer.email}${state.customer.phone ? ` • ${state.customer.phone}` : ''}`;
+      } else {
+        button.textContent = t('signIn');
+        button.classList.remove('max-w-[180px]', 'truncate');
+        button.title = '';
+      }
+    }
+
+    function openAccountModal() {
+      const modal = document.getElementById('account-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+
+      if (state.customer) {
+        document.getElementById('customer-name').value = state.customer.name || '';
+        document.getElementById('customer-email').value = state.customer.email || '';
+        document.getElementById('customer-phone').value = state.customer.phone || '';
+        setAccountStatus(`${state.customer.email}${state.customer.phone ? ` • ${state.customer.phone}` : ''}`);
+      }
+    }
+
+    function closeAccountModal() {
+      const modal = document.getElementById('account-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    async function loadCustomer() {
+      const auth = getFirebaseAuth();
+      if (auth && auth.currentUser && auth.currentUser.emailVerified) {
+        try {
+          await persistCustomerProfileFromAuth(auth.currentUser);
+          return;
+        } catch (_error) {
+          setAccountStatus(t('profileSaveFailed'));
+        }
+      }
+
+      const savedEmail = localStorage.getItem('boutique-customer-email');
+      if (!savedEmail) {
+        syncAccountButton();
+        return;
+      }
+      try {
+        state.customer = await api(`/api/users/${encodeURIComponent(savedEmail)}`);
+      } catch (error) {
+        state.customer = null;
+        localStorage.removeItem('boutique-customer-email');
+      }
+      syncAccountButton();
+    }
+
+    async function saveCustomerProfile(event) {
+      event.preventDefault();
+
+      const auth = getFirebaseAuth();
+      if (!auth) {
+        setAccountStatus(t('firebaseMissing'));
+        return;
+      }
+
+      const email = document.getElementById('customer-email').value.trim();
+      const password = document.getElementById('customer-password').value;
+      const name = document.getElementById('customer-name').value.trim();
+      const phone = document.getElementById('customer-phone').value.trim();
+
+      if (!email) {
+        setAccountStatus(t('enterEmail'));
+        return;
+      }
+
+      if (!password || password.length < 6) {
+        setAccountStatus(t('enterPassword'));
+        return;
+      }
+
+      try {
+        let credential;
+        try {
+          credential = await auth.signInWithEmailAndPassword(email, password);
+        } catch (signInError) {
+          if (signInError && signInError.code === 'auth/user-not-found') {
+            credential = await auth.createUserWithEmailAndPassword(email, password);
+            if (credential.user) {
+              await credential.user.sendEmailVerification();
+              setAccountStatus(t('signupSuccessVerify'));
+              await auth.signOut();
+            }
+            return;
+          }
+          throw signInError;
+        }
+
+        const user = credential.user;
+        if (!user) throw new Error('Missing Firebase user');
+
+        if (!user.emailVerified) {
+          await user.sendEmailVerification();
+          setAccountStatus(t('verifyEmailFirst'));
+          await auth.signOut();
+          return;
+        }
+
+        await persistCustomerProfileFromAuth(user, { name, phone });
+        setAccountStatus(t('signInSuccess'));
+        closeAccountModal();
+      } catch (_error) {
+        setAccountStatus(t('authFailed'));
+      }
+    }
+
+    async function sendVerificationEmail() {
+      const auth = getFirebaseAuth();
+      if (!auth) {
+        setAccountStatus(t('firebaseMissing'));
+        return;
+      }
+
+      const email = document.getElementById('customer-email').value.trim();
+      const password = document.getElementById('customer-password').value;
+      if (!email) {
+        setAccountStatus(t('enterEmail'));
+        return;
+      }
+
+      if (!password || password.length < 6) {
+        setAccountStatus(t('enterPassword'));
+        return;
+      }
+
+      try {
+        let credential;
+        try {
+          credential = await auth.signInWithEmailAndPassword(email, password);
+        } catch (signInError) {
+          if (signInError && signInError.code === 'auth/user-not-found') {
+            credential = await auth.createUserWithEmailAndPassword(email, password);
+          } else {
+            throw signInError;
+          }
+        }
+
+        if (credential.user) {
+          await credential.user.sendEmailVerification();
+          setAccountStatus(t('verifyEmailSent'));
+        }
+        await auth.signOut();
+      } catch (_error) {
+        setAccountStatus(t('authFailed'));
+      }
+    }
+
+    function logoutCustomer() {
+      const auth = getFirebaseAuth();
+      if (auth && auth.currentUser) {
+        auth.signOut().catch(() => {});
+      }
+      state.customer = null;
+      localStorage.removeItem('boutique-customer-email');
+      document.getElementById('customer-name').value = '';
+      document.getElementById('customer-email').value = '';
+      document.getElementById('customer-password').value = '';
+      document.getElementById('customer-phone').value = '';
+      setAccountStatus('');
+      syncAccountButton();
+      closeAccountModal();
+    }
+
+    function toggleCart(open) {
+      const overlay = document.getElementById('cart-overlay');
+      const drawer = document.getElementById('cart-drawer');
+      overlay.classList.toggle('hidden', !open);
+      drawer.classList.toggle('translate-x-full', !open);
+    }
+
+    function addToCart(product) {
+      const existing = state.cart.find((item) => item.id === product.id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        state.cart.push({ ...product, qty: 1 });
+      }
+      persistCart();
+      renderCart();
+      toggleCart(true);
+    }
+
+    function changeQty(id, delta) {
+      const item = state.cart.find((entry) => entry.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) state.cart = state.cart.filter((entry) => entry.id !== id);
+      persistCart();
+      renderCart();
+    }
+
+    function removeFromCart(id) {
+      state.cart = state.cart.filter((item) => item.id !== id);
+      persistCart();
+      renderCart();
+    }
+
+    function renderCart() {
+      const count = state.cart.reduce((sum, item) => sum + item.qty, 0);
+      const total = state.cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      document.getElementById('cart-count').textContent = count;
+      document.getElementById('cart-items-count').textContent = count;
+      document.getElementById('cart-total').textContent = money(total);
+
+      const root = document.getElementById('cart-items');
+      if (!state.cart.length) {
+        root.innerHTML = `<div class="rounded-2xl border border-dashed border-neutral-300 p-8 text-sm text-neutral-500">${t('emptyBag')}</div>`;
+        return;
+      }
+
+      root.innerHTML = state.cart.map((item) => `
+        <div class="rounded-2xl border border-neutral-200 p-4 bg-white">
+          <div class="flex gap-4">
+            <img src="${item.photo}" class="w-14 h-18 object-cover rounded-xl bg-neutral-100" alt="${getProductDisplayName(item)}" />
+            <div class="flex-1">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <p class="text-xs font-bold uppercase leading-5">${getProductDisplayName(item)}</p>
+                  <p class="text-[11px] text-neutral-500 mt-1">${item.sizes.join(', ')}</p>
+                </div>
+                <p class="text-sm font-black">${money(item.price)}</p>
+              </div>
+              <div class="mt-3 flex items-center justify-between">
+                <div class="inline-flex rounded-full border border-neutral-300 overflow-hidden text-sm">
+                  <button class="px-3 py-1" onclick="changeQty(${item.id}, -1)">-</button>
+                  <span class="px-3 py-1 border-l border-r border-neutral-300">${item.qty}</span>
+                  <button class="px-3 py-1" onclick="changeQty(${item.id}, 1)">+</button>
+                </div>
+                <button class="text-[11px] uppercase tracking-[0.2em] font-semibold text-neutral-500" onclick="removeFromCart(${item.id})">Remove</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderProducts() {
+      const grid = document.getElementById('products-grid');
+      if (!grid) return;
+
+      const sizeFilter = document.getElementById('filter-size').value;
+      const sort = document.getElementById('sort-price').value;
+
+      let items = [...state.products];
+      if (sizeFilter) items = items.filter((product) => product.sizes.includes(sizeFilter));
+      if (sort === 'low-high') items.sort((a, b) => a.price - b.price);
+      if (sort === 'high-low') items.sort((a, b) => b.price - a.price);
+      if (sort === 'newest') items.sort((a, b) => b.id - a.id);
+
+      if (!items.length) {
+        grid.innerHTML = '<div class="col-span-full rounded-2xl border border-dashed border-neutral-300 p-10 text-center text-sm text-neutral-500">No products available.</div>';
+        return;
+      }
+
+      const template = document.getElementById('product-template');
+      grid.innerHTML = '';
+      items.forEach((product) => {
+        const node = template.content.cloneNode(true);
+        const productName = getProductDisplayName(product);
+        node.querySelector('.product-photo').src = product.photo;
+        node.querySelector('.product-photo').alt = productName;
+        node.querySelector('.product-time').textContent = product.seenAt ? `${t('heroTag')} @ ${product.seenAt}` : t('heroTag');
+        node.querySelector('.product-desc').textContent = productName;
+        node.querySelector('.product-price').textContent = money(product.price);
+        node.querySelector('.product-sizes').innerHTML = product.sizes.map((size) => `<span class="px-2 py-1 rounded-full border border-neutral-300 text-[10px] uppercase tracking-[0.2em] font-bold">${size}</span>`).join('');
+        node.querySelector('.product-add').textContent = t('bag');
+        node.querySelector('.product-add').addEventListener('click', () => addToCart(product));
+        grid.appendChild(node);
+      });
+    }
+
+    function wireLanguageToggle() {
+      document.getElementById('lang-toggle').addEventListener('click', () => {
+        state.lang = state.lang === 'zh' ? 'en' : 'zh';
+        localStorage.setItem('boutique-lang', state.lang);
+        applyLanguage();
+      });
+    }
+
+    async function init() {
+      wireLanguageToggle();
+      document.getElementById('account-form').addEventListener('submit', saveCustomerProfile);
+      document.getElementById('send-verify-btn').addEventListener('click', sendVerificationEmail);
+
+      const auth = getFirebaseAuth();
+      if (auth) {
+        auth.onAuthStateChanged(async (user) => {
+          if (user && user.emailVerified) {
+            try {
+              await persistCustomerProfileFromAuth(user);
+            } catch (_error) {
+              setAccountStatus(t('profileSaveFailed'));
+            }
+          }
+        });
+      }
+
+      state.products = await api('/api/products');
+      await loadCustomer();
+      applyLanguage();
+      renderCart();
+      renderProducts();
+    }
+
+    window.toggleCart = toggleCart;
+    window.changeQty = changeQty;
+    window.removeFromCart = removeFromCart;
+    window.openAccountModal = openAccountModal;
+    window.closeAccountModal = closeAccountModal;
+    window.logoutCustomer = logoutCustomer;
+    window.renderProducts = renderProducts;
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

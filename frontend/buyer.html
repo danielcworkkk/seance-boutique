@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SÉANCE - Buyer Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .serif { font-family: 'Playfair Display', serif; }
+    .bg-canvas {
+      background:
+        radial-gradient(circle at 8% 5%, rgba(244, 114, 182, 0.2), transparent 25%),
+        radial-gradient(circle at 92% 0%, rgba(56, 189, 248, 0.22), transparent 24%),
+        linear-gradient(180deg, #f7fbff 0%, #f0ebe2 55%, #e5dfd4 100%);
+    }
+    .glass { backdrop-filter: blur(14px); background: rgba(255,255,255,0.8); }
+    .card-shadow { box-shadow: 0 24px 70px rgba(31, 41, 55, 0.12); }
+    .timeline-line::before {
+      content: '';
+      position: absolute;
+      left: 11px;
+      top: 24px;
+      width: 2px;
+      height: calc(100% - 24px);
+      background: linear-gradient(180deg, #111827, #d4d4d8);
+    }
+    .timeline-step:last-child .timeline-line::before { display: none; }
+  </style>
+</head>
+<body class="min-h-screen bg-canvas text-neutral-900">
+  <header class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5">
+    <nav class="glass card-shadow border border-white/60 rounded-[1.75rem] px-4 sm:px-6 py-3.5 flex items-center justify-between gap-3">
+      <div>
+        <p class="serif text-2xl sm:text-3xl font-semibold">SÉANCE</p>
+        <p class="text-[9px] uppercase tracking-[0.35em] text-neutral-500 -mt-0.5">Buyer Hub</p>
+      </div>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button id="lang-toggle" class="px-3 py-2 rounded-full border border-neutral-300 bg-white text-sm font-semibold">中文 / EN</button>
+        <a href="/" class="px-3 py-2 rounded-full border border-neutral-300 bg-white text-sm font-semibold" data-i18n="backHome">回到首頁</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    <section id="guide" class="glass card-shadow rounded-[2rem] border border-white/60 p-6 sm:p-7">
+      <p class="text-[10px] uppercase tracking-[0.28em] text-neutral-500 font-bold" data-i18n="guideTag">使用方式</p>
+      <h1 class="text-3xl sm:text-4xl font-black mt-2" data-i18n="guideTitle">掃碼結帳流程</h1>
+      <div class="grid sm:grid-cols-3 gap-4 mt-5 text-sm">
+        <div class="rounded-2xl border border-neutral-200 bg-white p-4">
+          <p class="font-bold mb-2">1</p>
+          <p data-i18n="guideStep1">在首頁挑選直播商品並加入購物袋。</p>
+        </div>
+        <div class="rounded-2xl border border-neutral-200 bg-white p-4">
+          <p class="font-bold mb-2">2</p>
+          <p data-i18n="guideStep2">到本頁掃碼付款，提交付款備註。</p>
+        </div>
+        <div class="rounded-2xl border border-neutral-200 bg-white p-4">
+          <p class="font-bold mb-2">3</p>
+          <p data-i18n="guideStep3">管理員核對後，訂單狀態會更新。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid lg:grid-cols-12 gap-6">
+      <section id="checkout" class="lg:col-span-7 glass card-shadow rounded-[2rem] border border-white/60 p-6 sm:p-7">
+        <p class="text-[10px] uppercase tracking-[0.28em] text-neutral-500 font-bold" data-i18n="checkoutTag">結帳</p>
+        <h2 class="text-3xl font-black mt-2" data-i18n="checkoutTitle">掃碼付款</h2>
+
+        <div class="mt-5 grid sm:grid-cols-2 gap-4">
+          <div class="rounded-2xl border border-neutral-200 bg-white p-4">
+            <label class="text-xs uppercase tracking-[0.22em] text-neutral-500 font-bold" data-i18n="paymentMethod">付款方式</label>
+            <select id="payment-method" class="w-full mt-2 rounded-2xl border border-neutral-300 bg-white px-4 py-3 text-sm">
+              <option value="alipay">Alipay HK</option>
+              <option value="payme">HSBC PayMe</option>
+            </select>
+            <div class="mt-4 rounded-2xl border border-neutral-200 bg-neutral-50 p-4 flex items-center justify-center">
+              <img id="qr-image" src="https://placehold.co/260x260/ffffff/111111?text=Scan+QR" alt="qr" class="w-44 h-44 object-contain" />
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-neutral-200 bg-white p-4">
+            <label class="text-xs uppercase tracking-[0.22em] text-neutral-500 font-bold" data-i18n="proofLabel">付款備註</label>
+            <input id="buyer-note" type="text" class="w-full mt-2 rounded-2xl border border-neutral-300 px-4 py-3 text-sm" data-i18n-placeholder="proofPlaceholder" placeholder="交易編號 / 截圖連結" />
+            <label class="text-xs uppercase tracking-[0.22em] text-neutral-500 font-bold mt-3 block" data-i18n="shippingAddress">收貨地址</label>
+            <input id="shipping-address" type="text" class="w-full mt-2 rounded-2xl border border-neutral-300 px-4 py-3 text-sm" data-i18n-placeholder="shippingAddressPlaceholder" placeholder="香港九龍..." />
+            <div class="mt-4 p-3 rounded-xl bg-neutral-50 border border-neutral-200 text-sm">
+              <p><span data-i18n="cartItems">商品數量</span>: <strong id="cart-count">0</strong></p>
+              <p><span data-i18n="cartTotal">總金額</span>: <strong id="cart-total">$0.00</strong></p>
+            </div>
+            <button id="place-order-btn" onclick="placeOrder()" class="w-full mt-4 rounded-2xl bg-black text-white py-3 font-semibold" data-i18n="placeOrder">提交訂單</button>
+          </div>
+        </div>
+      </section>
+
+      <aside id="progress" class="lg:col-span-5 space-y-6">
+        <div class="glass card-shadow rounded-[2rem] border border-white/60 p-6 sm:p-7">
+          <div class="flex justify-between items-center gap-3">
+            <div>
+              <p class="text-[10px] uppercase tracking-[0.28em] text-neutral-500 font-bold" data-i18n="progressTag">買家進度</p>
+              <h2 class="text-2xl font-black mt-2" data-i18n="progressTitle">訂單追蹤</h2>
+            </div>
+            <button onclick="refreshOrders()" class="px-3 py-2 rounded-full border border-neutral-300 bg-white text-xs font-semibold" data-i18n="refresh">更新</button>
+          </div>
+          <div id="order-status-pill" class="mt-4 inline-flex px-3 py-1 rounded-full bg-black text-white text-xs font-semibold">-</div>
+          <div id="progress-steps" class="mt-5 space-y-4"></div>
+        </div>
+
+        <div id="orders" class="glass card-shadow rounded-[2rem] border border-white/60 p-6 sm:p-7">
+          <p class="text-[10px] uppercase tracking-[0.28em] text-neutral-500 font-bold" data-i18n="orderTag">目前訂單</p>
+          <div id="current-order-card" class="mt-4 rounded-2xl border border-neutral-200 bg-white p-4 text-sm text-neutral-600">-</div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const CART_KEY = 'boutique-cart';
+
+    const translations = {
+      zh: {
+        backHome: '回到首頁',
+        guideTag: '使用方式',
+        guideTitle: '掃碼結帳流程',
+        guideStep1: '在首頁挑選直播商品並加入購物袋。',
+        guideStep2: '到本頁掃碼付款，提交付款備註。',
+        guideStep3: '管理員核對後，訂單狀態會更新。',
+        checkoutTag: '結帳',
+        checkoutTitle: '掃碼付款',
+        paymentMethod: '付款方式',
+        proofLabel: '付款備註',
+        proofPlaceholder: '交易編號 / 截圖連結',
+        shippingAddress: '收貨地址',
+        shippingAddressPlaceholder: '香港九龍...（請填詳細地址）',
+        cartItems: '商品數量',
+        cartTotal: '總金額',
+        placeOrder: '提交訂單',
+        progressTag: '買家進度',
+        progressTitle: '訂單追蹤',
+        refresh: '更新',
+        orderTag: '目前訂單',
+        noOrder: '暫時沒有訂單。',
+        needSignIn: '請先到首頁登入並儲存聯絡資料。',
+        emptyCart: '購物袋沒有商品，請先到首頁加入。',
+        success: '訂單已提交，等待管理員確認付款。',
+        step1: '已建立購物袋',
+        step2: '等待付款確認',
+        step3: '管理員審核',
+        step4: '已付款 / 打包中',
+        step5: '已寄出',
+        step6: '已完成'
+      },
+      en: {
+        backHome: 'Back to home',
+        guideTag: 'How to buy',
+        guideTitle: 'Scan checkout flow',
+        guideStep1: 'Pick live products on home and add to bag.',
+        guideStep2: 'Scan QR and submit your payment note here.',
+        guideStep3: 'Admin verifies payment and updates order status.',
+        checkoutTag: 'Checkout',
+        checkoutTitle: 'Scan and pay',
+        paymentMethod: 'Payment method',
+        proofLabel: 'Payment note',
+        proofPlaceholder: 'Transaction ID / screenshot URL',
+        shippingAddress: 'Shipping address',
+        shippingAddressPlaceholder: 'Flat / Building / Street / District',
+        cartItems: 'Items',
+        cartTotal: 'Total',
+        placeOrder: 'Place order',
+        progressTag: 'Buyer progress',
+        progressTitle: 'Order tracking',
+        refresh: 'Refresh',
+        orderTag: 'Current order',
+        noOrder: 'No order yet.',
+        needSignIn: 'Please sign in on the homepage first.',
+        emptyCart: 'Your bag is empty. Add products on homepage first.',
+        success: 'Order submitted and pending admin verification.',
+        step1: 'Bag prepared',
+        step2: 'Payment pending',
+        step3: 'Admin review',
+        step4: 'Paid / packing',
+        step5: 'Shipped',
+        step6: 'Completed'
+      }
+    };
+
+    const state = {
+      lang: localStorage.getItem('boutique-lang') || 'zh',
+      cart: JSON.parse(localStorage.getItem(CART_KEY) || '[]'),
+      customer: null,
+      orders: [],
+      lastOrderId: localStorage.getItem('boutique-last-order-id') || ''
+    };
+
+    function t(key) {
+      return translations[state.lang][key] || translations.zh[key] || key;
+    }
+
+    async function api(path, options) {
+      const response = await fetch(path, {
+        headers: { 'Content-Type': 'application/json' },
+        ...options
+      });
+      if (!response.ok) throw new Error(await response.text());
+      return response.status === 204 ? null : response.json();
+    }
+
+    function money(amount) {
+      return `$${Number(amount).toFixed(2)}`;
+    }
+
+    function applyLanguage() {
+      document.documentElement.lang = state.lang === 'zh' ? 'zh-Hant' : 'en';
+      document.querySelectorAll('[data-i18n]').forEach((node) => { node.textContent = t(node.dataset.i18n); });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach((node) => { node.placeholder = t(node.dataset.i18nPlaceholder); });
+      renderCartSummary();
+      renderCurrentOrder();
+    }
+
+    function renderCartSummary() {
+      const count = state.cart.reduce((sum, item) => sum + item.qty, 0);
+      const total = state.cart.reduce((sum, item) => sum + Number(item.price) * Number(item.qty), 0);
+      document.getElementById('cart-count').textContent = count;
+      document.getElementById('cart-total').textContent = money(total);
+    }
+
+    async function loadCustomer() {
+      const email = localStorage.getItem('boutique-customer-email');
+      if (!email) return;
+      try {
+        state.customer = await api(`/api/users/${encodeURIComponent(email)}`);
+      } catch (error) {
+        state.customer = null;
+      }
+    }
+
+    function updateQrPreview() {
+      const method = document.getElementById('payment-method').value;
+      document.getElementById('qr-image').src = method === 'payme'
+        ? 'https://placehold.co/260x260/ffffff/111111?text=PayMe+QR'
+        : 'https://placehold.co/260x260/ffffff/111111?text=Alipay+QR';
+    }
+
+    function progressSteps(order) {
+      return [
+        { key: 'step1', done: true },
+        { key: 'step2', done: ['pending', 'under_review', 'paid', 'packing', 'shipped', 'completed'].includes(order.paymentStatus || 'pending') },
+        { key: 'step3', done: ['under_review', 'paid', 'packing', 'shipped', 'completed'].includes(order.status || 'pending') },
+        { key: 'step4', done: ['paid', 'packing', 'shipped', 'completed'].includes(order.status || 'pending') },
+        { key: 'step5', done: ['shipped', 'completed'].includes(order.status || 'pending') },
+        { key: 'step6', done: (order.status || 'pending') === 'completed' }
+      ];
+    }
+
+    function renderCurrentOrder() {
+      const card = document.getElementById('current-order-card');
+      const pill = document.getElementById('order-status-pill');
+      const current = state.lastOrderId ? state.orders.find((order) => String(order.id) === String(state.lastOrderId)) : state.orders[0];
+
+      if (!current) {
+        card.textContent = t('noOrder');
+        pill.textContent = '-';
+        document.getElementById('progress-steps').innerHTML = `<p class="text-sm text-neutral-500">${t('noOrder')}</p>`;
+        return;
+      }
+
+      pill.textContent = `${current.paymentStatus || 'pending'} / ${current.status || 'pending'}`;
+      card.innerHTML = `
+        <p class="text-xs uppercase tracking-[0.2em] text-neutral-500 font-bold">#${current.id}</p>
+        <p class="font-semibold mt-2">${current.items.length} item(s)</p>
+        <p class="mt-1">${money(current.total)} • ${current.paymentMethod}</p>
+        <p class="mt-2 text-neutral-500">${current.buyerNote || ''}</p>
+      `;
+
+      const steps = progressSteps(current);
+      document.getElementById('progress-steps').innerHTML = steps.map((step, index) => `
+        <div class="timeline-step relative pl-9 ${step.done ? 'text-neutral-900' : 'text-neutral-400'}">
+          <div class="timeline-line absolute left-0 top-0 w-6 h-6 rounded-full border-2 ${step.done ? 'bg-black border-black' : 'bg-white border-neutral-300'}"></div>
+          <p class="text-sm font-semibold">${index + 1}. ${t(step.key)}</p>
+        </div>
+      `).join('');
+    }
+
+    async function refreshOrders() {
+      state.orders = await api('/api/orders');
+      renderCurrentOrder();
+    }
+
+    async function placeOrder() {
+      if (!state.customer) {
+        alert(t('needSignIn'));
+        return;
+      }
+
+      if (!state.cart.length) {
+        alert(t('emptyCart'));
+        return;
+      }
+
+      const payload = {
+        items: state.cart,
+        total: state.cart.reduce((sum, item) => sum + Number(item.price) * Number(item.qty), 0),
+        paymentMethod: document.getElementById('payment-method').value,
+        buyerNote: document.getElementById('buyer-note').value.trim(),
+        shippingAddress: document.getElementById('shipping-address').value.trim(),
+        customerEmail: state.customer.email,
+        customerPhone: state.customer.phone || '',
+        customerName: state.customer.name || ''
+      };
+
+      const order = await api('/api/orders', {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      });
+
+      state.lastOrderId = order.id;
+      localStorage.setItem('boutique-last-order-id', String(order.id));
+      state.cart = [];
+      localStorage.setItem(CART_KEY, JSON.stringify(state.cart));
+      renderCartSummary();
+      await refreshOrders();
+      document.getElementById('buyer-note').value = '';
+      document.getElementById('shipping-address').value = '';
+      alert(t('success'));
+    }
+
+    function wireLanguageToggle() {
+      document.getElementById('lang-toggle').addEventListener('click', () => {
+        state.lang = state.lang === 'zh' ? 'en' : 'zh';
+        localStorage.setItem('boutique-lang', state.lang);
+        applyLanguage();
+      });
+    }
+
+    async function init() {
+      wireLanguageToggle();
+      document.getElementById('payment-method').addEventListener('change', updateQrPreview);
+      await loadCustomer();
+      await refreshOrders();
+      updateQrPreview();
+      applyLanguage();
+      renderCartSummary();
+    }
+
+    window.placeOrder = placeOrder;
+    window.refreshOrders = refreshOrders;
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

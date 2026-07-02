@@ -1,0 +1,7 @@
+backend/node_modules/
+node_modules/
+.env
+backend/.env
+backend/uploads/*
+!backend/uploads/.gitkeep
+firebase-debug.log

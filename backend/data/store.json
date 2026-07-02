@@ -1,0 +1,221 @@
+{
+  "products": [
+    {
+      "id": 101,
+      "photo": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80",
+      "price": 150,
+      "nameZh": "黃色夏季吊帶連身裙",
+      "nameEn": "Yellow Summer Slip Dress",
+      "desc": "Yellow Summer Slip Dress",
+      "sizes": [
+        "S",
+        "M"
+      ],
+      "seenAt": "08:15",
+      "sizeChart": "",
+      "washingInfo": "",
+      "variants": [
+        {
+          "id": "Default-S",
+          "color": "Default",
+          "size": "S",
+          "stock": 20,
+          "price": 150,
+          "photo": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80",
+          "soldOut": false
+        },
+        {
+          "id": "Default-M",
+          "color": "Default",
+          "size": "M",
+          "stock": 20,
+          "price": 150,
+          "photo": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80",
+          "soldOut": false
+        }
+      ],
+      "stock": 40,
+      "soldOut": false
+    },
+    {
+      "id": 102,
+      "photo": "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=600&q=80",
+      "price": 220,
+      "nameZh": "經典高腰重磅牛仔褲",
+      "nameEn": "Classic Heavy-denim High Waisted Jeans",
+      "desc": "Classic Heavy-denim High Waisted Jeans",
+      "sizes": [
+        "M",
+        "L"
+      ],
+      "seenAt": "15:40",
+      "sizeChart": "",
+      "washingInfo": "",
+      "variants": [
+        {
+          "id": "DEFAULT-M",
+          "color": "Default",
+          "size": "M",
+          "stock": 20,
+          "price": 220,
+          "photo": "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=600&q=80",
+          "soldOut": false
+        },
+        {
+          "id": "DEFAULT-L",
+          "color": "Default",
+          "size": "L",
+          "stock": 20,
+          "price": 220,
+          "photo": "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=600&q=80",
+          "soldOut": false
+        }
+      ],
+      "stock": 40,
+      "soldOut": false
+    },
+    {
+      "id": 103,
+      "photo": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600&q=80",
+      "price": 86,
+      "nameZh": "奶油色高級針織連帽上衣",
+      "nameEn": "Premium Knit Hooded Fleece - Cream",
+      "desc": "Premium Knit Hooded Fleece - Cream",
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "seenAt": "24:35",
+      "sizeChart": "",
+      "washingInfo": "",
+      "variants": [
+        {
+          "id": "DEFAULT-S",
+          "color": "Default",
+          "size": "S",
+          "stock": 20,
+          "price": 86,
+          "photo": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600&q=80",
+          "soldOut": false
+        },
+        {
+          "id": "DEFAULT-M",
+          "color": "Default",
+          "size": "M",
+          "stock": 20,
+          "price": 86,
+          "photo": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600&q=80",
+          "soldOut": false
+        },
+        {
+          "id": "DEFAULT-L",
+          "color": "Default",
+          "size": "L",
+          "stock": 20,
+          "price": 86,
+          "photo": "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600&q=80",
+          "soldOut": false
+        }
+      ],
+      "stock": 60,
+      "soldOut": false
+    }
+  ],
+  "paymentQr": {
+    "alipay": "https://placehold.co/200x200/ffffff/000000?text=Scan+Alipay",
+    "payme": "https://placehold.co/200x200/ffffff/000000?text=Scan+PayMe"
+  },
+  "users": [
+    {
+      "id": 1782196105734,
+      "email": "firebase-test@example.com",
+      "phone": "90000000",
+      "name": "Firebase Test",
+      "language": "en",
+      "updatedAt": "2026-06-23T06:28:25.734Z",
+      "createdAt": "2026-06-23T06:28:25.734Z"
+    },
+    {
+      "id": 1782113917334,
+      "email": "daniel@gmail.com",
+      "phone": "12345678",
+      "name": "daniel",
+      "language": "zh",
+      "updatedAt": "2026-06-22T07:38:37.334Z",
+      "createdAt": "2026-06-22T07:38:37.334Z"
+    },
+    {
+      "id": 1782113592801,
+      "email": "testbuyer@example.com",
+      "phone": "91234567",
+      "name": "Test Buyer",
+      "language": "en",
+      "updatedAt": "2026-06-22T07:38:05.058Z",
+      "createdAt": "2026-06-22T07:33:12.801Z"
+    }
+  ],
+  "orders": [
+    {
+      "id": 1782193315735,
+      "items": [
+        {
+          "id": 101,
+          "photo": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80",
+          "price": 150,
+          "desc": "Yellow Summer Slip Dress",
+          "sizes": [
+            "S",
+            "M"
+          ],
+          "seenAt": "08:15",
+          "qty": 1
+        },
+        {
+          "id": 102,
+          "photo": "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=600&q=80",
+          "price": 220,
+          "desc": "Classic Heavy-denim High Waisted Jeans",
+          "sizes": [
+            "M",
+            "L"
+          ],
+          "seenAt": "15:40",
+          "qty": 1
+        }
+      ],
+      "total": 370,
+      "paymentMethod": "alipay",
+      "paymentStatus": "pending",
+      "status": "pending",
+      "buyerNote": "",
+      "proofUrl": "",
+      "customerEmail": "daniel@gmail.com",
+      "customerPhone": "12345678",
+      "customerName": "daniel",
+      "createdAt": "2026-06-23T05:41:55.735Z",
+      "updatedAt": "2026-06-23T06:05:02.619Z"
+    }
+  ],
+  "coupons": [],
+  "adminStaff": [
+    {
+      "id": 1782960658060,
+      "email": "staff1@seance.local",
+      "name": "Staff One",
+      "role": "staff",
+      "passwordHash": "10176e7b7b24d317acfcf8d2064cfd2f24e154f7b5a96603077d5ef813d6a6b6"
+    },
+    {
+      "id": 1782202074367,
+      "email": "owner@seance.local",
+      "name": "Owner",
+      "role": "owner",
+      "passwordHash": "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"
+    }
+  ],
+  "shippingRules": {
+    "freeShippingThreshold": 500,
+    "defaultShippingFee": 35
+  }
+}
