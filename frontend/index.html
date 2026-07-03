@@ -48,6 +48,7 @@
         <button id="lang-toggle" class="px-3 py-2 rounded-full border border-neutral-300 bg-white text-sm font-semibold hover:bg-neutral-50">中文 / EN</button>
         <button id="account-button" onclick="openAccountModal()" class="hidden sm:inline-flex px-3 py-2 rounded-full border border-neutral-300 bg-white text-sm font-semibold hover:bg-neutral-50" data-i18n="signIn">登入</button>
         <a href="/buyer.html" class="px-3.5 py-2 rounded-full bg-black text-white text-sm font-semibold hover:bg-neutral-800" data-i18n="buyerHub">結帳與訂單</a>
+        <button onclick="toggleCatMenu(true)" class="px-3 py-2 rounded-full border border-neutral-300 bg-white text-sm font-semibold hover:bg-neutral-50" data-i18n="categoryMenu">目錄</button>
         <button onclick="toggleCart(true)" class="relative px-3 py-2 rounded-full border border-neutral-300 bg-white text-sm font-semibold hover:bg-neutral-50">
           <i class="fa-solid fa-bag-shopping mr-2"></i><span data-i18n="bag">購物袋</span>
           <span id="cart-count" class="ml-2 inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full bg-black text-white text-[10px] font-black">0</span>
@@ -137,6 +138,21 @@
     </div>
   </div>
 
+  <div id="cat-overlay" onclick="toggleCatMenu(false)" class="fixed inset-0 bg-black/40 hidden z-40"></div>
+  <aside id="cat-drawer" class="fixed top-0 left-0 h-full w-full max-w-sm -translate-x-full transition-transform duration-300 z-50 bg-white shadow-2xl flex flex-col">
+    <div class="p-5 border-b border-neutral-200 flex items-center justify-between bg-neutral-50">
+      <div>
+        <p class="text-[10px] uppercase tracking-[0.3em] text-neutral-500 font-bold" data-i18n="categoryMenu">目錄</p>
+        <h3 class="text-xl font-black mt-1" data-i18n="categoryMenuTitle">商品分類</h3>
+      </div>
+      <button onclick="toggleCatMenu(false)" class="text-neutral-500 hover:text-black"><i class="fa-solid fa-xmark text-lg"></i></button>
+    </div>
+    <div class="flex-1 overflow-auto p-5 space-y-2 scrollbar">
+      <button onclick="selectCategory('')" id="cat-all-btn" class="w-full text-left px-4 py-3 rounded-2xl bg-black text-white text-sm font-semibold" data-i18n="allCategories">全部商品</button>
+      <div id="category-list" class="space-y-2"></div>
+    </div>
+  </aside>
+
   <div id="cart-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-black/40 hidden z-40"></div>
   <aside id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md translate-x-full transition-transform duration-300 z-50 bg-white shadow-2xl flex flex-col">
     <div class="p-5 border-b border-neutral-200 flex items-center justify-between bg-neutral-50">
@@ -189,6 +205,9 @@
         signIn: '登入',
         signOut: '登出',
         buyerHub: '結帳與訂單',
+        categoryMenu: '目錄',
+        categoryMenuTitle: '商品分類',
+        allCategories: '全部商品',
         bag: '加入購物袋',
         heroTag: '互動直播',
         heroTitle: '本場直播焦點',
@@ -232,6 +251,9 @@
         signIn: 'Sign in',
         signOut: 'Sign out',
         buyerHub: 'Checkout & Orders',
+        categoryMenu: '目錄',
+        categoryMenuTitle: 'Categories',
+        allCategories: 'All Products',
         bag: 'Add to Bag',
         heroTag: 'Interactive live',
         heroTitle: 'Live stream spotlight',
@@ -275,6 +297,8 @@
       lang: localStorage.getItem('boutique-lang') || 'zh',
       customer: null,
       products: [],
+      categories: [],
+      selectedCategory: '',
       cart: JSON.parse(localStorage.getItem(STORAGE_CART) || '[]')
     };
 
@@ -299,6 +323,12 @@
       return response.status === 204 ? null : response.json();
     }
 
+    function getCategoryDisplayName(cat) {
+      if (!cat) return '';
+      if (state.lang === 'zh') return cat.nameZh || cat.nameEn || '';
+      return cat.nameEn || cat.nameZh || '';
+    }
+
     function applyLanguage() {
       document.documentElement.lang = state.lang === 'zh' ? 'zh-Hant' : 'en';
       document.querySelectorAll('[data-i18n]').forEach((node) => {
@@ -308,6 +338,7 @@
         node.placeholder = t(node.dataset.i18nPlaceholder);
       });
       syncAccountButton();
+      renderCategories();
       renderCart();
       renderProducts();
     }
@@ -543,21 +574,42 @@
       drawer.classList.toggle('translate-x-full', !open);
     }
 
-    function getSelectedProductSize(cardEl) {
-      const select = cardEl.querySelector('.product-size-select');
-      return select ? select.value : '';
+    function toggleCatMenu(open) {
+      const overlay = document.getElementById('cat-overlay');
+      const drawer = document.getElementById('cat-drawer');
+      overlay.classList.toggle('hidden', !open);
+      drawer.classList.toggle('-translate-x-full', !open);
     }
 
-    function addToCart(product) {
-      // find the card element for this product to get selected size
-      const cards = document.querySelectorAll('#products-grid > div');
-      let selectedSize = '';
-      for (const card of cards) {
-        if (card._product && card._product.id === product.id) {
-          selectedSize = getSelectedProductSize(card);
-          break;
+    function selectCategory(catId) {
+      state.selectedCategory = String(catId || '');
+      toggleCatMenu(false);
+      renderCategories();
+      renderProducts();
+    }
+
+    function renderCategories() {
+      const root = document.getElementById('category-list');
+      if (!root) return;
+
+      const allBtn = document.getElementById('cat-all-btn');
+      if (allBtn) {
+        if (!state.selectedCategory) {
+          allBtn.classList.add('bg-black', 'text-white');
+          allBtn.classList.remove('bg-white', 'text-neutral-800');
+        } else {
+          allBtn.classList.remove('bg-black', 'text-white');
+          allBtn.classList.add('bg-white', 'text-neutral-800');
         }
       }
+
+      root.innerHTML = state.categories.map((cat) => {
+        const active = String(cat.id) === state.selectedCategory;
+        return `<button onclick="selectCategory('${cat.id}')" class="w-full text-left px-4 py-3 rounded-2xl text-sm font-semibold ${active ? 'bg-black text-white' : 'bg-white text-neutral-800 border border-neutral-200'}">${getCategoryDisplayName(cat)}</button>`;
+      }).join('');
+    }
+
+    function addToCart(product, selectedSize) {
       if (!selectedSize && product.sizes && product.sizes.length) {
         selectedSize = product.sizes[0];
       }
@@ -636,6 +688,9 @@
       const sort = document.getElementById('sort-price').value;
 
       let items = [...state.products];
+      if (state.selectedCategory) {
+        items = items.filter((product) => String(product.category || '') === state.selectedCategory);
+      }
       if (sizeFilter) items = items.filter((product) => product.sizes.includes(sizeFilter));
       if (sort === 'low-high') items.sort((a, b) => a.price - b.price);
       if (sort === 'high-low') items.sort((a, b) => b.price - a.price);
@@ -650,21 +705,24 @@
       grid.innerHTML = '';
       items.forEach((product) => {
         const node = template.content.cloneNode(true);
+        const articleEl = node.firstElementChild;
         const productName = getProductDisplayName(product);
         node.querySelector('.product-photo').src = product.photo;
         node.querySelector('.product-photo').alt = productName;
-        node.querySelector('.product-time').textContent = product.seenAt ? `${t('heroTag')} @ ${product.seenAt}` : t('heroTag');
-        node.querySelector('.product-desc').textContent = productName;
-        node.querySelector('.product-price').textContent = money(product.price);
-        node.querySelector('.product-sizes').innerHTML = product.sizes.map((size) => `<span class="px-2 py-1 rounded-full border border-neutral-300 text-[10px] uppercase tracking-[0.2em] font-bold">${size}</span>`).join('');
-        const sizeSelect = node.querySelector('.product-size-select');
+        articleEl.querySelector('.product-time').textContent = product.seenAt ? `${t('heroTag')} @ ${product.seenAt}` : t('heroTag');
+        articleEl.querySelector('.product-desc').textContent = productName;
+        articleEl.querySelector('.product-price').textContent = money(product.price);
+        articleEl.querySelector('.product-sizes').innerHTML = product.sizes.map((size) => `<span class="px-2 py-1 rounded-full border border-neutral-300 text-[10px] uppercase tracking-[0.2em] font-bold">${size}</span>`).join('');
+        const sizeSelect = articleEl.querySelector('.product-size-select');
         if (sizeSelect && product.sizes.length) {
           sizeSelect.innerHTML = product.sizes.map((size) => `<option value="${size}">${size}</option>`).join('');
         }
-        node.querySelector('.product-add').textContent = t('bag');
-        node.querySelector('.product-add').addEventListener('click', () => addToCart(product));
-        node._product = product;
-        grid.appendChild(node);
+        articleEl.querySelector('.product-add').textContent = t('bag');
+        articleEl.querySelector('.product-add').addEventListener('click', () => {
+          const selSize = sizeSelect ? sizeSelect.value : product.sizes[0];
+          addToCart(product, selSize);
+        });
+        grid.appendChild(articleEl);
       });
     }
 
@@ -694,7 +752,12 @@
         });
       }
 
-      state.products = await api('/api/products');
+      const [products, categories] = await Promise.all([
+        api('/api/products'),
+        api('/api/categories')
+      ]);
+      state.products = products || [];
+      state.categories = categories || [];
       await loadCustomer();
       applyLanguage();
       renderCart();
@@ -702,6 +765,8 @@
     }
 
     window.toggleCart = toggleCart;
+    window.toggleCatMenu = toggleCatMenu;
+    window.selectCategory = selectCategory;
     window.changeQty = changeQty;
     window.removeFromCart = removeFromCart;
     window.openAccountModal = openAccountModal;

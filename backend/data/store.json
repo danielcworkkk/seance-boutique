@@ -7,6 +7,7 @@
       "nameZh": "黃色夏季吊帶連身裙",
       "nameEn": "Yellow Summer Slip Dress",
       "desc": "Yellow Summer Slip Dress",
+      "category": "1783050605287",
       "sizes": [
         "S",
         "M"
@@ -44,6 +45,7 @@
       "nameZh": "經典高腰重磅牛仔褲",
       "nameEn": "Classic Heavy-denim High Waisted Jeans",
       "desc": "Classic Heavy-denim High Waisted Jeans",
+      "category": "",
       "sizes": [
         "M",
         "L"
@@ -81,6 +83,7 @@
       "nameZh": "奶油色高級針織連帽上衣",
       "nameEn": "Premium Knit Hooded Fleece - Cream",
       "desc": "Premium Knit Hooded Fleece - Cream",
+      "category": "",
       "sizes": [
         "S",
         "M",
@@ -200,11 +203,11 @@
   "coupons": [],
   "adminStaff": [
     {
-      "id": 1782960658060,
-      "email": "staff1@seance.local",
-      "name": "Staff One",
-      "role": "staff",
-      "passwordHash": "10176e7b7b24d317acfcf8d2064cfd2f24e154f7b5a96603077d5ef813d6a6b6"
+      "id": 1783050476753,
+      "email": "test@gmail.com",
+      "name": "testadmin",
+      "role": "owner",
+      "passwordHash": "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9"
     },
     {
       "id": 1782202074367,
@@ -217,5 +220,12 @@
   "shippingRules": {
     "freeShippingThreshold": 500,
     "defaultShippingFee": 35
-  }
+  },
+  "categories": [
+    {
+      "id": 1783050605287,
+      "nameZh": "衣服",
+      "nameEn": "clothes"
+    }
+  ]
 }

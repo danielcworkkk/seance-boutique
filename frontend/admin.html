@@ -41,80 +41,94 @@
     </div>
   </div>
 
+  <div id="password-modal" class="fixed inset-0 z-[60] hidden items-center justify-center bg-black/60 px-4">
+    <div class="glass card-shadow w-full max-w-sm rounded-[2rem] border border-white/60 p-6">
+      <p class="text-sm font-bold" data-i18n="verifyPasswordTitle">請輸入密碼確認操作</p>
+      <input id="verify-password-input" type="password" class="w-full mt-3 rounded-2xl border border-neutral-300 px-4 py-3 text-sm" data-i18n-placeholder="verifyPasswordPlaceholder" placeholder="請輸入管理員密碼" />
+      <p id="verify-password-error" class="text-xs text-red-500 mt-2 hidden"></p>
+      <div class="flex gap-3 mt-4">
+        <button id="verify-password-cancel" class="flex-1 rounded-2xl border border-neutral-300 bg-white py-2.5 font-semibold text-sm" data-i18n="cancel">取消</button>
+        <button id="verify-password-confirm" class="flex-1 rounded-2xl bg-black text-white py-2.5 font-semibold text-sm" data-i18n="confirm">確認</button>
+      </div>
+    </div>
+  </div>
+
   <div id="admin-app" class="opacity-0 pointer-events-none select-none">
-    <header class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5">
-      <nav class="glass card-shadow border border-white/60 rounded-[1.75rem] px-4 sm:px-6 py-3.5 flex items-center justify-between gap-3">
+    <header class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 pt-5">
+      <nav class="glass card-shadow border border-white/60 rounded-[1.75rem] px-3 sm:px-6 py-3 flex items-center justify-between gap-1 sm:gap-3 flex-wrap">
         <div>
-          <p class="serif text-2xl sm:text-3xl font-semibold">SÉANCE</p>
-          <p class="text-[9px] uppercase tracking-[0.35em] text-neutral-500 -mt-0.5" data-i18n="adminStudio">Admin Studio Pro</p>
+          <p class="serif text-xl sm:text-3xl font-semibold">SÉANCE</p>
+          <p class="text-[8px] sm:text-[9px] uppercase tracking-[0.35em] text-neutral-500 -mt-0.5" data-i18n="adminStudio">Admin Studio Pro</p>
         </div>
-        <div class="flex items-center gap-2 sm:gap-3">
-          <button id="lang-toggle" class="px-3 py-2 rounded-full border border-neutral-300 bg-white text-sm font-semibold">中文 / EN</button>
-          <button id="logout-admin" class="px-3 py-2 rounded-full border border-neutral-300 bg-white text-sm font-semibold" data-i18n="logout">登出</button>
-          <a href="/" class="px-3 py-2 rounded-full border border-neutral-300 bg-white text-sm font-semibold" data-i18n="toStore">前台</a>
+        <div class="flex items-center gap-1 sm:gap-3">
+          <button id="lang-toggle" class="px-2 sm:px-3 py-1.5 sm:py-2 rounded-full border border-neutral-300 bg-white text-xs sm:text-sm font-semibold">中/EN</button>
+          <button id="logout-admin" class="px-2 sm:px-3 py-1.5 sm:py-2 rounded-full border border-neutral-300 bg-white text-xs sm:text-sm font-semibold" data-i18n="logout">登出</button>
+          <a href="/" class="px-2 sm:px-3 py-1.5 sm:py-2 rounded-full border border-neutral-300 bg-white text-xs sm:text-sm font-semibold" data-i18n="toStore">前台</a>
         </div>
       </nav>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-      <section class="hero-ribbon rounded-[2rem] p-6 sm:p-7">
-        <p class="text-[10px] uppercase tracking-[0.3em] font-bold" data-i18n="overviewTag">總覽</p>
-        <h1 class="text-3xl sm:text-4xl font-black mt-2" data-i18n="overviewTitle">一站式管理直播時裝店</h1>
-        <p class="text-sm text-white/80 mt-2" data-i18n="overviewSubtitle">支援多規格商品、即時庫存、訂單流程、店員帳號與優惠規則。</p>
+    <main class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-6 space-y-4 sm:space-y-6">
+      <section class="hero-ribbon rounded-[1.5rem] sm:rounded-[2rem] p-4 sm:p-7">
+        <p class="text-[8px] sm:text-[10px] uppercase tracking-[0.3em] font-bold" data-i18n="overviewTag">總覽</p>
+        <h1 class="text-2xl sm:text-4xl font-black mt-1 sm:mt-2" data-i18n="overviewTitle">一站式管理直播時裝店</h1>
+        <p class="text-xs sm:text-sm text-white/80 mt-1 sm:mt-2" data-i18n="overviewSubtitle">支援多規格商品、即時庫存、訂單流程、店員帳號與優惠規則。</p>
       </section>
 
-      <section class="glass card-shadow rounded-[2rem] border border-white/60 p-5 sm:p-6">
-        <div class="flex flex-wrap gap-2" id="admin-tabs">
-          <button class="tab-btn active px-4 py-2 rounded-full border border-neutral-300 bg-white text-sm font-semibold" data-tab="overview" data-i18n="tabOverview">總覽</button>
-          <button class="tab-btn px-4 py-2 rounded-full border border-neutral-300 bg-white text-sm font-semibold" data-tab="products" data-i18n="tabProducts">商品與庫存</button>
-          <button class="tab-btn px-4 py-2 rounded-full border border-neutral-300 bg-white text-sm font-semibold" data-tab="orders" data-i18n="tabOrders">訂單中心</button>
-          <button class="tab-btn px-4 py-2 rounded-full border border-neutral-300 bg-white text-sm font-semibold" data-tab="marketing" data-i18n="tabMarketing">優惠與運費</button>
-          <button class="tab-btn px-4 py-2 rounded-full border border-neutral-300 bg-white text-sm font-semibold" data-tab="staff" data-i18n="tabStaff">店員帳號</button>
+      <section class="glass card-shadow rounded-[1.5rem] sm:rounded-[2rem] border border-white/60 p-3 sm:p-6">
+        <div class="flex flex-wrap gap-1 sm:gap-2" id="admin-tabs">
+          <button class="tab-btn active px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-neutral-300 bg-white text-xs sm:text-sm font-semibold" data-tab="overview" data-i18n="tabOverview">總覽</button>
+          <button class="tab-btn px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-neutral-300 bg-white text-xs sm:text-sm font-semibold" data-tab="products" data-i18n="tabProducts">商品與庫存</button>
+          <button class="tab-btn px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-neutral-300 bg-white text-xs sm:text-sm font-semibold" data-tab="orders" data-i18n="tabOrders">訂單中心</button>
+          <button class="tab-btn px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-neutral-300 bg-white text-xs sm:text-sm font-semibold" data-tab="marketing" data-i18n="tabMarketing">優惠與運費</button>
+          <button class="tab-btn px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-neutral-300 bg-white text-xs sm:text-sm font-semibold" data-tab="categories" data-i18n="tabCategories">商品分類</button>
+          <button class="tab-btn px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-neutral-300 bg-white text-xs sm:text-sm font-semibold" data-tab="staff" data-i18n="tabStaff">店員帳號</button>
         </div>
       </section>
 
-      <section id="tab-overview" class="tab-pane glass card-shadow rounded-[2rem] border border-white/60 p-6 sm:p-7">
-        <div id="stats" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+      <section id="tab-overview" class="tab-pane glass card-shadow rounded-[1.5rem] sm:rounded-[2rem] border border-white/60 p-4 sm:p-7">
+        <div id="stats" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"></div>
+        <div id="low-stock-alert" class="mt-6"></div>
+        <div id="recent-orders-overview" class="mt-6"></div>
       </section>
 
-      <section id="tab-products" class="tab-pane hidden grid lg:grid-cols-12 gap-6">
-        <div class="lg:col-span-5 glass card-shadow rounded-[2rem] border border-white/60 p-6">
-          <h2 class="text-2xl font-black" data-i18n="productFormTitle">上架 / 編輯商品</h2>
-          <form id="product-form" class="space-y-4 mt-4">
+      <section id="tab-products" class="tab-pane hidden grid lg:grid-cols-12 gap-4 sm:gap-6">
+        <div class="lg:col-span-5 glass card-shadow rounded-[1.5rem] sm:rounded-[2rem] border border-white/60 p-4 sm:p-6">
+          <h2 class="text-xl sm:text-2xl font-black" data-i18n="productFormTitle">上架 / 編輯商品</h2>
+          <form id="product-form" class="space-y-3 sm:space-y-4 mt-3 sm:mt-4">
             <input type="hidden" id="product-id" />
-            <div class="grid grid-cols-3 gap-3">
-              <input id="product-name-zh" type="text" class="rounded-2xl border border-neutral-300 px-4 py-3" data-i18n-placeholder="nameZhPlaceholder" placeholder="商品中文名" required />
-              <input id="product-name-en" type="text" class="rounded-2xl border border-neutral-300 px-4 py-3" data-i18n-placeholder="nameEnPlaceholder" placeholder="Product English Name" required />
-              <input id="product-price" type="number" min="1" step="0.01" class="rounded-2xl border border-neutral-300 px-4 py-3" data-i18n-placeholder="pricePlaceholder" placeholder="基本售價" required />
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
+              <input id="product-name-zh" type="text" class="rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm" data-i18n-placeholder="nameZhPlaceholder" placeholder="商品中文名" required />
+              <input id="product-name-en" type="text" class="rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm" data-i18n-placeholder="nameEnPlaceholder" placeholder="Product English Name" required />
+              <input id="product-price" type="number" min="1" step="0.01" class="col-span-2 sm:col-span-1 rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm" data-i18n-placeholder="pricePlaceholder" placeholder="基本售價" required />
             </div>
-            <input id="product-seen-at" type="text" class="w-full rounded-2xl border border-neutral-300 px-4 py-3" data-i18n-placeholder="seenAtPlaceholder" placeholder="直播時間 15:40" />
-            <textarea id="product-desc" rows="3" class="w-full rounded-2xl border border-neutral-300 px-4 py-3" data-i18n-placeholder="descPlaceholder" placeholder="商品描述" required></textarea>
-            <textarea id="product-size-chart" rows="2" class="w-full rounded-2xl border border-neutral-300 px-4 py-3" data-i18n-placeholder="sizeChartPlaceholder" placeholder="尺碼表"></textarea>
-            <textarea id="product-washing-info" rows="2" class="w-full rounded-2xl border border-neutral-300 px-4 py-3" data-i18n-placeholder="washingPlaceholder" placeholder="洗滌說明"></textarea>
-
-            <div class="rounded-2xl border border-neutral-200 bg-white p-4">
+            <input id="product-seen-at" type="text" class="w-full rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm" data-i18n-placeholder="seenAtPlaceholder" placeholder="直播時間 15:40" />
+            <select id="product-category" class="w-full rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm"></select>
+            <textarea id="product-desc" rows="2" class="w-full rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm" data-i18n-placeholder="descPlaceholder" placeholder="商品描述" required></textarea>
+            <textarea id="product-size-chart" rows="2" class="w-full rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm" data-i18n-placeholder="sizeChartPlaceholder" placeholder="尺碼表"></textarea>
+            <textarea id="product-washing-info" rows="2" class="w-full rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm" data-i18n-placeholder="washingPlaceholder" placeholder="洗滌說明"></textarea>
+            <input id="product-photo-url" type="url" class="w-full rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm" data-i18n-placeholder="productPhoto" placeholder="商品圖片網址" required />
+            <div class="rounded-2xl border border-neutral-200 bg-white p-3 sm:p-4">
               <div class="flex items-center justify-between">
-                <p class="text-sm font-bold" data-i18n="variantsTitle">Variants（顏色 / 尺碼 / 庫存 / 圖片）</p>
-                <button id="add-variant" type="button" class="px-3 py-1.5 rounded-full border border-neutral-300 text-xs font-semibold" data-i18n="addVariant">新增規格</button>
+                <p class="text-xs sm:text-sm font-bold" data-i18n="variantsTitle">Variants（顏色 / 尺碼 / 庫存）</p>
+                <button id="add-variant" type="button" class="px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border border-neutral-300 text-[10px] sm:text-xs font-semibold" data-i18n="addVariant">新增規格</button>
               </div>
-              <div id="variant-list" class="grid variant-grid gap-3 mt-3"></div>
+              <div id="variant-list" class="grid variant-grid gap-2 sm:gap-3 mt-2 sm:mt-3"></div>
             </div>
-
-            <button class="w-full rounded-2xl bg-black text-white py-3 font-semibold" type="submit" data-i18n="saveProduct">儲存商品</button>
-            <button id="reset-form" class="w-full rounded-2xl border border-neutral-300 bg-white py-3 font-semibold" type="button" data-i18n="newProduct">重設表單</button>
+            <button class="w-full rounded-2xl bg-black text-white py-2.5 sm:py-3 font-semibold text-sm" type="submit" data-i18n="saveProduct">儲存商品</button>
+            <button id="reset-form" class="w-full rounded-2xl border border-neutral-300 bg-white py-2.5 sm:py-3 font-semibold text-sm" type="button" data-i18n="newProduct">重設表單</button>
           </form>
         </div>
-
-        <div class="lg:col-span-7 glass card-shadow rounded-[2rem] border border-white/60 p-6">
-          <h2 class="text-2xl font-black" data-i18n="productListTitle">商品清單</h2>
-          <div class="overflow-auto mt-4">
-            <table class="w-full text-sm">
-              <thead class="text-left text-[10px] uppercase tracking-[0.2em] text-neutral-500">
+        <div class="lg:col-span-7 glass card-shadow rounded-[1.5rem] sm:rounded-[2rem] border border-white/60 p-4 sm:p-6">
+          <h2 class="text-xl sm:text-2xl font-black" data-i18n="productListTitle">商品清單</h2>
+          <div class="overflow-auto mt-3 sm:mt-4">
+            <table class="w-full text-xs sm:text-sm">
+              <thead class="text-left text-[8px] sm:text-[10px] uppercase tracking-[0.2em] text-neutral-500">
                 <tr>
-                  <th class="py-3" data-i18n="colItem">商品</th>
-                  <th class="py-3" data-i18n="colStock">庫存</th>
-                  <th class="py-3" data-i18n="colPrice">價格</th>
-                  <th class="py-3 text-right" data-i18n="colAction">操作</th>
+                  <th class="py-2 sm:py-3 px-1" data-i18n="colItem">商品</th>
+                  <th class="py-2 sm:py-3 px-1 hidden sm:table-cell" data-i18n="colVariantStock">規格庫存</th>
+                  <th class="py-2 sm:py-3 px-1" data-i18n="colPrice">價格</th>
+                  <th class="py-2 sm:py-3 px-1 text-right" data-i18n="colAction">操作</th>
                 </tr>
               </thead>
               <tbody id="products-table" class="divide-y divide-neutral-200"></tbody>
@@ -123,20 +137,19 @@
         </div>
       </section>
 
-      <section id="tab-orders" class="tab-pane hidden glass card-shadow rounded-[2rem] border border-white/60 p-6">
-        <h2 class="text-2xl font-black" data-i18n="orderListTitle">訂單管理中心</h2>
-        <p class="text-sm text-neutral-600 mt-1" data-i18n="orderListDesc">顯示顧客資料、購買內容、收貨地址與物流單號。</p>
-        <div class="overflow-auto mt-4">
-          <table class="w-full text-sm">
-            <thead class="text-left text-[10px] uppercase tracking-[0.2em] text-neutral-500">
+      <section id="tab-orders" class="tab-pane hidden glass card-shadow rounded-[1.5rem] sm:rounded-[2rem] border border-white/60 p-4 sm:p-6">
+        <h2 class="text-xl sm:text-2xl font-black" data-i18n="orderListTitle">訂單管理中心</h2>
+        <p class="text-xs sm:text-sm text-neutral-600 mt-1" data-i18n="orderListDesc">顯示顧客資料、購買內容、收貨地址與物流單號。</p>
+        <div class="overflow-auto mt-3 sm:mt-4">
+          <table class="w-full text-xs sm:text-sm">
+            <thead class="text-left text-[8px] sm:text-[10px] uppercase tracking-[0.2em] text-neutral-500">
               <tr>
-                <th class="py-3" data-i18n="colOrder">訂單</th>
-                <th class="py-3" data-i18n="colCustomer">顧客</th>
-                <th class="py-3" data-i18n="colItems">內容</th>
-                <th class="py-3" data-i18n="colAddress">地址</th>
-                <th class="py-3" data-i18n="colStatus">狀態</th>
-                <th class="py-3" data-i18n="colTracking">順豐單號</th>
-                <th class="py-3 text-right" data-i18n="colAction">操作</th>
+                <th class="py-2 sm:py-3 px-1" data-i18n="colOrder">訂單</th>
+                <th class="py-2 sm:py-3 px-1 hidden sm:table-cell" data-i18n="colCustomer">顧客</th>
+                <th class="py-2 sm:py-3 px-1 hidden sm:table-cell" data-i18n="colItems">內容</th>
+                <th class="py-2 sm:py-3 px-1 hidden sm:table-cell" data-i18n="colAddress">地址</th>
+                <th class="py-2 sm:py-3 px-1" data-i18n="colStatus">狀態</th>
+                <th class="py-2 sm:py-3 px-1 text-right" data-i18n="colAction">操作</th>
               </tr>
             </thead>
             <tbody id="orders-table" class="divide-y divide-neutral-200"></tbody>
@@ -144,76 +157,86 @@
         </div>
       </section>
 
-      <section id="tab-marketing" class="tab-pane hidden grid lg:grid-cols-12 gap-6">
-        <div class="lg:col-span-5 glass card-shadow rounded-[2rem] border border-white/60 p-6">
-          <h2 class="text-2xl font-black" data-i18n="couponTitle">優惠碼設定</h2>
-          <form id="coupon-form" class="space-y-3 mt-4">
-            <input id="coupon-code" type="text" class="w-full rounded-2xl border border-neutral-300 px-4 py-3" placeholder="SUMMER10" required />
-            <div class="grid grid-cols-2 gap-3">
-              <select id="coupon-type" class="rounded-2xl border border-neutral-300 px-4 py-3">
+      <section id="tab-marketing" class="tab-pane hidden grid lg:grid-cols-12 gap-4 sm:gap-6">
+        <div class="lg:col-span-5 glass card-shadow rounded-[1.5rem] sm:rounded-[2rem] border border-white/60 p-4 sm:p-6">
+          <h2 class="text-xl sm:text-2xl font-black" data-i18n="couponTitle">優惠碼設定</h2>
+          <form id="coupon-form" class="space-y-2 sm:space-y-3 mt-3 sm:mt-4">
+            <input id="coupon-code" type="text" class="w-full rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm" placeholder="SUMMER10" required />
+            <div class="grid grid-cols-2 gap-2 sm:gap-3">
+              <select id="coupon-type" class="rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm">
                 <option value="percent">Percent %</option>
                 <option value="fixed">Fixed $</option>
               </select>
-              <input id="coupon-value" type="number" class="rounded-2xl border border-neutral-300 px-4 py-3" min="1" step="0.01" placeholder="10" required />
+              <input id="coupon-value" type="number" class="rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm" min="1" step="0.01" placeholder="10" required />
             </div>
-            <div class="grid grid-cols-2 gap-3">
-              <input id="coupon-min-spend" type="number" min="0" step="0.01" class="rounded-2xl border border-neutral-300 px-4 py-3" data-i18n-placeholder="minSpendPlaceholder" placeholder="最低消費" />
-              <input id="coupon-target-product" type="number" min="0" class="rounded-2xl border border-neutral-300 px-4 py-3" data-i18n-placeholder="targetProductPlaceholder" placeholder="指定商品 ID（可空白）" />
+            <div class="grid grid-cols-2 gap-2 sm:gap-3">
+              <input id="coupon-min-spend" type="number" min="0" step="0.01" class="rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm" data-i18n-placeholder="minSpendPlaceholder" placeholder="最低消費" />
+              <input id="coupon-max-uses" type="number" min="0" class="rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm" data-i18n-placeholder="maxUsesPlaceholder" placeholder="使用次數上限 (0=無限)" />
             </div>
-            <input id="coupon-desc" type="text" class="w-full rounded-2xl border border-neutral-300 px-4 py-3" data-i18n-placeholder="couponDescPlaceholder" placeholder="優惠說明" />
-            <button class="w-full rounded-2xl bg-black text-white py-3 font-semibold" type="submit" data-i18n="saveCoupon">儲存優惠碼</button>
+            <input id="coupon-desc" type="text" class="w-full rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm" data-i18n-placeholder="couponDescPlaceholder" placeholder="優惠說明" />
+            <button class="w-full rounded-2xl bg-black text-white py-2.5 sm:py-3 font-semibold text-sm" type="submit" data-i18n="saveCoupon">儲存優惠碼</button>
           </form>
-
-          <h3 class="text-xl font-black mt-7" data-i18n="shippingTitle">運費規則</h3>
-          <form id="shipping-form" class="space-y-3 mt-3">
-            <input id="free-shipping-threshold" type="number" min="0" step="0.01" class="w-full rounded-2xl border border-neutral-300 px-4 py-3" data-i18n-placeholder="freeShippingPlaceholder" placeholder="滿額免運門檻" required />
-            <input id="default-shipping-fee" type="number" min="0" step="0.01" class="w-full rounded-2xl border border-neutral-300 px-4 py-3" data-i18n-placeholder="shippingFeePlaceholder" placeholder="預設運費" required />
-            <button class="w-full rounded-2xl border border-neutral-300 bg-white py-3 font-semibold" type="submit" data-i18n="saveShipping">儲存運費規則</button>
+          <h3 class="text-lg sm:text-xl font-black mt-5 sm:mt-7" data-i18n="shippingTitle">運費規則</h3>
+          <form id="shipping-form" class="space-y-2 sm:space-y-3 mt-2 sm:mt-3">
+            <input id="free-shipping-threshold" type="number" min="0" step="0.01" class="w-full rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm" data-i18n-placeholder="freeShippingPlaceholder" placeholder="滿額免運門檻" required />
+            <input id="default-shipping-fee" type="number" min="0" step="0.01" class="w-full rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm" data-i18n-placeholder="shippingFeePlaceholder" placeholder="預設運費" required />
+            <button class="w-full rounded-2xl border border-neutral-300 bg-white py-2.5 sm:py-3 font-semibold text-sm" type="submit" data-i18n="saveShipping">儲存運費規則</button>
           </form>
         </div>
-
-        <div class="lg:col-span-7 glass card-shadow rounded-[2rem] border border-white/60 p-6">
-          <h2 class="text-2xl font-black" data-i18n="couponListTitle">優惠碼清單</h2>
-          <div id="coupon-list" class="mt-4 space-y-3"></div>
+        <div class="lg:col-span-7 glass card-shadow rounded-[1.5rem] sm:rounded-[2rem] border border-white/60 p-4 sm:p-6">
+          <h2 class="text-xl sm:text-2xl font-black" data-i18n="couponListTitle">優惠碼清單</h2>
+          <div id="coupon-list" class="mt-3 sm:mt-4 space-y-2 sm:space-y-3"></div>
         </div>
       </section>
 
-      <section id="tab-staff" class="tab-pane hidden grid lg:grid-cols-12 gap-6">
-        <div class="lg:col-span-5 glass card-shadow rounded-[2rem] border border-white/60 p-6">
-          <h2 class="text-2xl font-black" data-i18n="staffTitle">新增店員</h2>
-          <form id="staff-form" class="space-y-3 mt-4">
-            <input id="staff-email" type="email" class="w-full rounded-2xl border border-neutral-300 px-4 py-3" placeholder="staff@yourshop.com" required />
-            <input id="staff-password" type="password" minlength="6" class="w-full rounded-2xl border border-neutral-300 px-4 py-3" data-i18n-placeholder="staffPasswordPlaceholder" placeholder="店員密碼" required />
-            <input id="staff-name" type="text" class="w-full rounded-2xl border border-neutral-300 px-4 py-3" data-i18n-placeholder="staffNamePlaceholder" placeholder="店員名稱" required />
-            <select id="staff-role" class="w-full rounded-2xl border border-neutral-300 px-4 py-3">
+      <section id="tab-categories" class="tab-pane hidden grid lg:grid-cols-12 gap-4 sm:gap-6">
+        <div class="lg:col-span-5 glass card-shadow rounded-[1.5rem] sm:rounded-[2rem] border border-white/60 p-4 sm:p-6">
+          <h2 class="text-xl sm:text-2xl font-black" data-i18n="categoriesTitle">商品分類管理</h2>
+          <form id="category-form" class="space-y-2 sm:space-y-3 mt-3 sm:mt-4">
+            <input id="category-name-zh" type="text" class="w-full rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm" data-i18n-placeholder="categoryZhPlaceholder" placeholder="分類中文名" required />
+            <input id="category-name-en" type="text" class="w-full rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm" data-i18n-placeholder="categoryEnPlaceholder" placeholder="Category English Name" />
+            <button class="w-full rounded-2xl bg-black text-white py-2.5 sm:py-3 font-semibold text-sm" type="submit" data-i18n="saveCategory">新增分類</button>
+          </form>
+        </div>
+        <div class="lg:col-span-7 glass card-shadow rounded-[1.5rem] sm:rounded-[2rem] border border-white/60 p-4 sm:p-6">
+          <h2 class="text-xl sm:text-2xl font-black" data-i18n="categoryListTitle">分類清單</h2>
+          <div id="category-list" class="mt-3 sm:mt-4 space-y-2 sm:space-y-3"></div>
+        </div>
+      </section>
+
+      <section id="tab-staff" class="tab-pane hidden grid lg:grid-cols-12 gap-4 sm:gap-6">
+        <div class="lg:col-span-5 glass card-shadow rounded-[1.5rem] sm:rounded-[2rem] border border-white/60 p-4 sm:p-6">
+          <h2 class="text-xl sm:text-2xl font-black" data-i18n="staffTitle">新增店員</h2>
+          <form id="staff-form" class="space-y-2 sm:space-y-3 mt-3 sm:mt-4">
+            <input id="staff-email" type="email" class="w-full rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm" placeholder="staff@yourshop.com" required />
+            <input id="staff-password" type="password" minlength="6" class="w-full rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm" data-i18n-placeholder="staffPasswordPlaceholder" placeholder="店員密碼" required />
+            <input id="staff-name" type="text" class="w-full rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm" data-i18n-placeholder="staffNamePlaceholder" placeholder="店員名稱" required />
+            <select id="staff-role" class="w-full rounded-2xl border border-neutral-300 px-3 sm:px-4 py-2 sm:py-3 text-sm">
               <option value="staff">Staff</option>
               <option value="owner">Owner</option>
             </select>
-            <button class="w-full rounded-2xl bg-black text-white py-3 font-semibold" type="submit" data-i18n="addStaff">新增店員</button>
+            <button class="w-full rounded-2xl bg-black text-white py-2.5 sm:py-3 font-semibold text-sm" type="submit" data-i18n="addStaff">新增店員</button>
           </form>
         </div>
-        <div class="lg:col-span-7 glass card-shadow rounded-[2rem] border border-white/60 p-6">
-          <h2 class="text-2xl font-black" data-i18n="staffListTitle">店員清單</h2>
-          <div id="staff-list" class="mt-4 space-y-3"></div>
+        <div class="lg:col-span-7 glass card-shadow rounded-[1.5rem] sm:rounded-[2rem] border border-white/60 p-4 sm:p-6">
+          <h2 class="text-xl sm:text-2xl font-black" data-i18n="staffListTitle">店員清單</h2>
+          <div id="staff-list" class="mt-3 sm:mt-4 space-y-2 sm:space-y-3"></div>
         </div>
       </section>
     </main>
   </div>
 
   <template id="variant-template">
-    <div class="rounded-xl border border-neutral-200 p-3 bg-neutral-50 space-y-2">
-      <div class="grid grid-cols-2 gap-2">
-        <input class="variant-color rounded-xl border border-neutral-300 px-3 py-2 text-sm" placeholder="Color" />
-        <input class="variant-size rounded-xl border border-neutral-300 px-3 py-2 text-sm" placeholder="Size" />
+    <div class="rounded-xl border border-neutral-200 p-2 sm:p-3 bg-neutral-50 space-y-1.5 sm:space-y-2">
+      <div class="grid grid-cols-2 gap-1.5 sm:gap-2">
+        <input class="variant-color rounded-xl border border-neutral-300 px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm" data-i18n-placeholder="variantColor" placeholder="顏色" />
+        <input class="variant-size rounded-xl border border-neutral-300 px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm" data-i18n-placeholder="variantSize" placeholder="尺碼" />
       </div>
-      <div class="grid grid-cols-2 gap-2">
-        <input type="number" min="0" class="variant-stock rounded-xl border border-neutral-300 px-3 py-2 text-sm" placeholder="Stock" />
-        <input type="number" min="1" step="0.01" class="variant-price rounded-xl border border-neutral-300 px-3 py-2 text-sm" placeholder="Price" />
+      <div class="grid grid-cols-2 gap-1.5 sm:gap-2">
+        <input type="number" min="0" class="variant-stock rounded-xl border border-neutral-300 px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm" data-i18n-placeholder="variantStock" placeholder="庫存" />
+        <input type="number" min="1" step="0.01" class="variant-price rounded-xl border border-neutral-300 px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm" data-i18n-placeholder="variantPrice" placeholder="售價" />
       </div>
-      <input type="file" accept="image/*" capture="environment" class="variant-photo-file w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm" />
-      <input type="url" class="variant-photo-url w-full rounded-xl border border-neutral-300 px-3 py-2 text-sm" placeholder="https://..." />
-      <img class="variant-preview hidden w-full h-28 object-cover rounded-xl border border-neutral-200" alt="variant preview" />
-      <button type="button" class="variant-remove w-full rounded-xl border border-neutral-300 py-2 text-xs font-semibold">Remove</button>
+      <button type="button" class="variant-remove w-full rounded-xl border border-neutral-300 py-1.5 sm:py-2 text-[10px] sm:text-xs font-semibold" data-i18n="variantRemove">移除</button>
     </div>
   </template>
 
@@ -227,7 +250,10 @@
       users: [],
       coupons: [],
       shippingRules: { freeShippingThreshold: 500, defaultShippingFee: 35 },
-      staff: []
+      staff: [],
+      categories: [],
+      lowStockItems: [],
+      pendingPasswordCallback: null
     };
 
     const translations = {
@@ -237,27 +263,30 @@
         adminStudio: 'Admin Studio Pro', logout: '登出', toStore: '前台', overviewTag: '總覽', overviewTitle: '一站式管理直播時裝店', overviewSubtitle: '支援多規格商品、即時庫存、訂單流程、店員帳號與優惠規則。',
         tabOverview: '總覽', tabProducts: '商品與庫存', tabOrders: '訂單中心', tabMarketing: '優惠與運費', tabStaff: '店員帳號',
         productFormTitle: '上架 / 編輯商品', nameZhPlaceholder: '商品中文名', nameEnPlaceholder: '商品英文名', pricePlaceholder: '基本售價', seenAtPlaceholder: '直播時間 15:40', descPlaceholder: '商品描述',
-        sizeChartPlaceholder: '尺碼表', washingPlaceholder: '洗滌說明', variantsTitle: 'Variants（顏色 / 尺碼 / 庫存 / 圖片）', addVariant: '新增規格',
-        saveProduct: '儲存商品', newProduct: '重設表單', productListTitle: '商品清單', colItem: '商品', colStock: '庫存', colPrice: '價格', colAction: '操作',
+        sizeChartPlaceholder: '尺碼表', washingPlaceholder: '洗滌說明', variantsTitle: '商品規格（顏色 / 尺碼 / 庫存）', addVariant: '新增規格',
+        saveProduct: '儲存商品', newProduct: '重設表單', productListTitle: '商品清單', colItem: '商品', colStock: '庫存', colVariantStock: '規格庫存', colPrice: '價格', colAction: '操作',
         orderListTitle: '訂單管理中心', orderListDesc: '顯示顧客資料、購買內容、收貨地址與物流單號。', colOrder: '訂單', colCustomer: '顧客', colItems: '內容', colAddress: '地址', colStatus: '狀態', colTracking: '順豐單號',
-        couponTitle: '優惠碼設定', minSpendPlaceholder: '最低消費', targetProductPlaceholder: '指定商品 ID（可空白）', couponDescPlaceholder: '優惠說明', saveCoupon: '儲存優惠碼',
+        couponTitle: '優惠碼設定', minSpendPlaceholder: '最低消費', maxUsesPlaceholder: '使用次數上限 (0=無限)', couponDescPlaceholder: '優惠說明', saveCoupon: '儲存優惠碼',
         shippingTitle: '運費規則', freeShippingPlaceholder: '滿額免運門檻', shippingFeePlaceholder: '預設運費', saveShipping: '儲存運費規則', couponListTitle: '優惠碼清單',
         staffTitle: '新增店員', staffNamePlaceholder: '店員名稱', addStaff: '新增店員', staffListTitle: '店員清單',
         statProducts: '商品數量', statVariants: '規格組合', statLowStock: '低庫存款式', statPendingOrders: '待處理訂單',
-        edit: '編輯', delete: '刪除', save: '儲存', noData: '暫無資料', soldOut: 'Sold Out',
+        statRevenue: '總營業額', statOrdersToday: '今日訂單', statActiveCoupons: '有效優惠碼', statCustomers: '顧客人數',
+        edit: '編輯', delete: '刪除', save: '儲存', noData: '暫無資料', soldOut: 'Sold Out', deleteOrder: '刪除訂單',
         status_pending: '未付款', status_under_review: '審核中', status_paid: '已成功收款', status_packing: '備貨中', status_shipped: '已寄出', status_completed: '已完成',
         loginFailed: '登入失敗，請確認 Email 和密碼。', loginSuccess: '登入成功', authRequired: '請先登入管理員帳號。',
-        productSaved: '商品已儲存。', couponSaved: '優惠碼已儲存。', shippingSaved: '運費規則已更新。', staffAdded: '店員已新增。', orderSaved: '訂單狀態已更新。',
+        productSaved: '商品已儲存。', couponSaved: '優惠碼已儲存。', shippingSaved: '運費規則已更新。', staffAdded: '店員已新增。', orderSaved: '訂單狀態已更新。', orderDeleted: '訂單已刪除。',
         confirmStep1: '第一步確認：確定要進行這個操作嗎？', confirmStep2: '第二步確認：請再次確認，操作將立即生效。',
-        confirmEditProduct: '你將載入此商品進行編輯。',
-        confirmDeleteProduct: '你將刪除此商品。',
-        confirmSaveProduct: '你將儲存商品變更。',
-        confirmSaveOrder: '你將更新此訂單狀態。',
-        confirmDeleteCoupon: '你將刪除此優惠碼。',
-        confirmSaveCoupon: '你將新增或更新優惠碼。',
-        confirmSaveShipping: '你將更新運費規則。',
-        confirmAddStaff: '你將新增此店員帳號。',
-        confirmDeleteStaff: '你將刪除此店員帳號。'
+        confirmEditProduct: '你將載入此商品進行編輯。', confirmDeleteProduct: '你將刪除此商品。', confirmSaveProduct: '你將儲存商品變更。',
+        confirmSaveOrder: '你將更新此訂單狀態。', confirmDeleteOrder: '你將永久刪除此訂單。',
+        confirmDeleteCoupon: '你將刪除此優惠碼。', confirmSaveCoupon: '你將新增或更新優惠碼。', confirmSaveShipping: '你將更新運費規則。',
+        confirmAddStaff: '你將新增此店員帳號。', confirmDeleteStaff: '你將刪除此店員帳號。',
+        tabCategories: '商品分類', categoriesTitle: '商品分類管理', categoryZhPlaceholder: '分類中文名', categoryEnPlaceholder: 'Category English Name',
+        saveCategory: '新增分類', categoryListTitle: '分類清單', categorySaved: '分類已儲存。',
+        confirmSaveCategory: '你將新增此分類。', confirmDeleteCategory: '你將刪除此分類。',
+        variantColor: '顏色', variantSize: '尺碼', variantStock: '庫存', variantPrice: '售價', variantRemove: '移除', productPhoto: '商品圖片',
+        verifyPasswordTitle: '請輸入密碼確認操作', verifyPasswordPlaceholder: '請輸入管理員密碼', cancel: '取消', confirm: '確認',
+        verifyPasswordWrong: '密碼錯誤，請重試。', lowStockTitle: '⚠️ 低庫存提醒 (≤5)', noLowStock: '所有商品庫存充足 👍', recentOrdersTitle: '最近訂單',
+        usesLabel: '已使用', maxUses: '上限'
       },
       en: {
         gateTag: 'Staff Secure Login', gateTitle: 'Secure Admin Login', gateBody: 'Only owner and staff accounts can access products, inventory, orders and discounts.',
@@ -265,27 +294,30 @@
         adminStudio: 'Admin Studio Pro', logout: 'Logout', toStore: 'Storefront', overviewTag: 'Overview', overviewTitle: 'Run your live fashion store in one place', overviewSubtitle: 'Manage variants, inventory, orders, staff accounts, and marketing rules.',
         tabOverview: 'Overview', tabProducts: 'Products & Inventory', tabOrders: 'Order Dashboard', tabMarketing: 'Coupons & Shipping', tabStaff: 'Staff Accounts',
         productFormTitle: 'Create / Edit Product', nameZhPlaceholder: 'Chinese product name', nameEnPlaceholder: 'English product name', pricePlaceholder: 'Base price', seenAtPlaceholder: 'Live time 15:40', descPlaceholder: 'Product description',
-        sizeChartPlaceholder: 'Size chart', washingPlaceholder: 'Washing instruction', variantsTitle: 'Variants (color / size / stock / image)', addVariant: 'Add variant',
-        saveProduct: 'Save product', newProduct: 'Reset form', productListTitle: 'Product list', colItem: 'Item', colStock: 'Stock', colPrice: 'Price', colAction: 'Action',
+        sizeChartPlaceholder: 'Size chart', washingPlaceholder: 'Washing instruction', variantsTitle: 'Variants (color / size / stock)', addVariant: 'Add variant',
+        saveProduct: 'Save product', newProduct: 'Reset form', productListTitle: 'Product list', colItem: 'Item', colStock: 'Stock', colVariantStock: 'Variant Stock', colPrice: 'Price', colAction: 'Action',
         orderListTitle: 'Order Dashboard', orderListDesc: 'See customer details, purchased items, address and tracking number.', colOrder: 'Order', colCustomer: 'Customer', colItems: 'Items', colAddress: 'Address', colStatus: 'Status', colTracking: 'Tracking',
-        couponTitle: 'Coupon Settings', minSpendPlaceholder: 'Minimum spend', targetProductPlaceholder: 'Target product ID (optional)', couponDescPlaceholder: 'Coupon description', saveCoupon: 'Save coupon',
+        couponTitle: 'Coupon Settings', minSpendPlaceholder: 'Minimum spend', maxUsesPlaceholder: 'Max uses (0=unlimited)', couponDescPlaceholder: 'Coupon description', saveCoupon: 'Save coupon',
         shippingTitle: 'Shipping Rules', freeShippingPlaceholder: 'Free shipping threshold', shippingFeePlaceholder: 'Default shipping fee', saveShipping: 'Save shipping rules', couponListTitle: 'Coupons',
         staffTitle: 'Add Staff', staffNamePlaceholder: 'Staff name', addStaff: 'Add staff', staffListTitle: 'Staff list',
         statProducts: 'Products', statVariants: 'Variants', statLowStock: 'Low Stock', statPendingOrders: 'Pending Orders',
-        edit: 'Edit', delete: 'Delete', save: 'Save', noData: 'No data yet', soldOut: 'Sold Out',
+        statRevenue: 'Total Revenue', statOrdersToday: 'Orders Today', statActiveCoupons: 'Active Coupons', statCustomers: 'Customers',
+        edit: 'Edit', delete: 'Delete', save: 'Save', noData: 'No data yet', soldOut: 'Sold Out', deleteOrder: 'Delete Order',
         status_pending: 'Unpaid', status_under_review: 'Under Review', status_paid: 'Paid', status_packing: 'Packing', status_shipped: 'Shipped', status_completed: 'Completed',
         loginFailed: 'Login failed. Check email and password.', loginSuccess: 'Logged in successfully', authRequired: 'Please login as admin first.',
-        productSaved: 'Product saved.', couponSaved: 'Coupon saved.', shippingSaved: 'Shipping rules updated.', staffAdded: 'Staff added.', orderSaved: 'Order updated.',
+        productSaved: 'Product saved.', couponSaved: 'Coupon saved.', shippingSaved: 'Shipping rules updated.', staffAdded: 'Staff added.', orderSaved: 'Order updated.', orderDeleted: 'Order deleted.',
         confirmStep1: 'Step 1 confirmation: Are you sure you want to continue?', confirmStep2: 'Step 2 confirmation: Please confirm again. This action will apply immediately.',
-        confirmEditProduct: 'You are about to load this product for editing.',
-        confirmDeleteProduct: 'You are about to delete this product.',
-        confirmSaveProduct: 'You are about to save product changes.',
-        confirmSaveOrder: 'You are about to update this order.',
-        confirmDeleteCoupon: 'You are about to delete this coupon.',
-        confirmSaveCoupon: 'You are about to create or update this coupon.',
-        confirmSaveShipping: 'You are about to update shipping rules.',
-        confirmAddStaff: 'You are about to add this staff account.',
-        confirmDeleteStaff: 'You are about to delete this staff account.'
+        confirmEditProduct: 'You are about to load this product for editing.', confirmDeleteProduct: 'You are about to delete this product.', confirmSaveProduct: 'You are about to save product changes.',
+        confirmSaveOrder: 'You are about to update this order.', confirmDeleteOrder: 'You are about to permanently delete this order.',
+        confirmDeleteCoupon: 'You are about to delete this coupon.', confirmSaveCoupon: 'You are about to create or update this coupon.', confirmSaveShipping: 'You are about to update shipping rules.',
+        confirmAddStaff: 'You are about to add this staff account.', confirmDeleteStaff: 'You are about to delete this staff account.',
+        tabCategories: 'Categories', categoriesTitle: 'Category Management', categoryZhPlaceholder: 'Chinese category name', categoryEnPlaceholder: 'English category name',
+        saveCategory: 'Add Category', categoryListTitle: 'Category List', categorySaved: 'Category saved.',
+        confirmSaveCategory: 'You are about to add this category.', confirmDeleteCategory: 'You are about to delete this category.',
+        variantColor: 'Color', variantSize: 'Size', variantStock: 'Stock', variantPrice: 'Price', variantRemove: 'Remove', productPhoto: 'Product Photo',
+        verifyPasswordTitle: 'Enter password to confirm', verifyPasswordPlaceholder: 'Enter admin password', cancel: 'Cancel', confirm: 'Confirm',
+        verifyPasswordWrong: 'Wrong password. Please try again.', lowStockTitle: '⚠️ Low Stock Alert (≤5)', noLowStock: 'All products have sufficient stock 👍', recentOrdersTitle: 'Recent Orders',
+        usesLabel: 'Used', maxUses: 'max'
       }
     };
 
@@ -295,7 +327,8 @@
 
     function api(path, options = {}) {
       const isFormData = options.body instanceof FormData;
-      return fetch(path, {
+      const base = window.API_BASE_URL !== undefined ? window.API_BASE_URL : '';
+      return fetch(base + path, {
         ...options,
         headers: {
           ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
@@ -317,6 +350,81 @@
       renderOrders();
       renderCoupons();
       renderStaff();
+      renderCategories();
+    }
+
+    function getCategoryDisplayName(cat) {
+      if (!cat) return '';
+      if (state.lang === 'zh') return cat.nameZh || cat.nameEn || '';
+      return cat.nameEn || cat.nameZh || '';
+    }
+
+    function showPasswordModal(callback) {
+      state.pendingPasswordCallback = callback;
+      document.getElementById('verify-password-input').value = '';
+      document.getElementById('verify-password-error').classList.add('hidden');
+      document.getElementById('password-modal').classList.remove('hidden');
+      document.getElementById('password-modal').classList.add('flex');
+      document.getElementById('verify-password-input').focus();
+    }
+
+    function hidePasswordModal() {
+      document.getElementById('password-modal').classList.add('hidden');
+      document.getElementById('password-modal').classList.remove('flex');
+      state.pendingPasswordCallback = null;
+    }
+
+    async function confirmPassword() {
+      const password = document.getElementById('verify-password-input').value.trim();
+      if (!password) return;
+      try {
+        const base = window.API_BASE_URL !== undefined ? window.API_BASE_URL : '';
+        const result = await fetch(base + '/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: state.adminEmail, passcode: password })
+        }).then(async (r) => { if (!r.ok) throw new Error(); return r.json(); });
+        if (result.token) {
+          hidePasswordModal();
+          if (state.pendingPasswordCallback) {
+            state.pendingPasswordCallback();
+            state.pendingPasswordCallback = null;
+          }
+        }
+      } catch (_e) {
+        document.getElementById('verify-password-error').classList.remove('hidden');
+        document.getElementById('verify-password-error').textContent = t('verifyPasswordWrong');
+      }
+    }
+
+    function populateCategorySelect(selectedCategory) {
+      const select = document.getElementById('product-category');
+      if (!select) return;
+      select.innerHTML = '<option value="">-</option>' + state.categories.map((cat) => `<option value="${cat.id}" ${String(cat.id) === String(selectedCategory) ? 'selected' : ''}>${getCategoryDisplayName(cat)}</option>`).join('');
+    }
+
+    function renderCategories() {
+      populateCategorySelect(document.getElementById('product-category')?.value || '');
+      const root = document.getElementById('category-list');
+      if (!root) return;
+      if (!state.categories.length) {
+        root.innerHTML = `<div class="rounded-xl border border-neutral-200 p-3 sm:p-4 text-xs sm:text-sm text-neutral-500">${t('noData')}</div>`;
+        return;
+      }
+      root.innerHTML = state.categories.map((cat) => `
+        <div class="rounded-xl border border-neutral-200 bg-white p-3 sm:p-4 flex items-start justify-between gap-2 sm:gap-3">
+          <div><p class="font-semibold text-sm">${getCategoryDisplayName(cat)}</p><p class="text-[10px] sm:text-xs text-neutral-500">ID: ${cat.id}</p></div>
+          <button data-delete-category="${cat.id}" class="px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border border-neutral-300 text-[10px] sm:text-xs font-semibold">${t('delete')}</button>
+        </div>`).join('');
+      document.querySelectorAll('[data-delete-category]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          if (!twoStepConfirm('confirmDeleteCategory')) return;
+          showPasswordModal(async () => {
+            await api(`/api/categories/${btn.dataset.deleteCategory}`, { method: 'DELETE' });
+            await loadAdminData();
+          });
+        });
+      });
     }
 
     function unlockDashboard() {
@@ -327,16 +435,12 @@
     }
 
     function activateTab(tab) {
-      document.querySelectorAll('.tab-btn').forEach((btn) => {
-        btn.classList.toggle('active', btn.dataset.tab === tab);
-      });
+      document.querySelectorAll('.tab-btn').forEach((btn) => { btn.classList.toggle('active', btn.dataset.tab === tab); });
       document.querySelectorAll('.tab-pane').forEach((pane) => pane.classList.add('hidden'));
       document.getElementById(`tab-${tab}`).classList.remove('hidden');
     }
 
-    function toCurrency(value) {
-      return `$${Number(value || 0).toFixed(2)}`;
-    }
+    function toCurrency(value) { return `$${Number(value || 0).toFixed(2)}`; }
 
     function twoStepConfirm(actionMessageKey) {
       const first = window.confirm(`${t('confirmStep1')}\n\n${t(actionMessageKey)}`);
@@ -345,9 +449,7 @@
     }
 
     function displayProductName(product) {
-      if (state.lang === 'zh') {
-        return product.nameZh || product.nameEn || product.desc || '-';
-      }
+      if (state.lang === 'zh') return product.nameZh || product.nameEn || product.desc || '-';
       return product.nameEn || product.nameZh || product.desc || '-';
     }
 
@@ -357,102 +459,73 @@
     }
 
     function renderStats() {
-      const totalVariants = state.products.reduce((sum, product) => sum + (Array.isArray(product.variants) ? product.variants.length : 0), 0);
-      const lowStock = state.products.reduce((sum, product) => sum + (product.variants || []).filter((variant) => Number(variant.stock || 0) <= 2).length, 0);
-      const pendingOrders = state.orders.filter((order) => (order.status || 'pending') === 'pending').length;
-      const stats = [
-        [t('statProducts'), state.products.length],
-        [t('statVariants'), totalVariants],
-        [t('statLowStock'), lowStock],
-        [t('statPendingOrders'), pendingOrders]
-      ];
+      const totalVariants = state.products.reduce((sum, p) => sum + (Array.isArray(p.variants) ? p.variants.length : 0), 0);
+      const lowStock = state.lowStockItems.length;
+      const pendingOrders = state.orders.filter((o) => (o.status || 'pending') === 'pending').length;
+      const totalRevenue = state.orders.reduce((sum, o) => sum + Number(o.total || 0), 0);
+      const today = new Date().toISOString().slice(0, 10);
+      const ordersToday = state.orders.filter((o) => (o.createdAt || '').startsWith(today)).length;
+      const activeCoupons = state.coupons.filter((c) => c.active !== false).length;
+      const customers = state.users.length;
 
+      const stats = [
+        [t('statRevenue'), toCurrency(totalRevenue)],
+        [t('statOrdersToday'), ordersToday],
+        [t('statLowStock'), lowStock],
+        [t('statActiveCoupons'), activeCoupons]
+      ];
       document.getElementById('stats').innerHTML = stats.map(([label, value]) => `
-        <div class="rounded-2xl border border-neutral-200 bg-white p-4">
-          <p class="text-[10px] uppercase tracking-[0.2em] text-neutral-500 font-bold">${label}</p>
-          <p class="text-3xl font-black mt-2">${value}</p>
-        </div>
+        <div class="rounded-2xl border border-neutral-200 bg-white p-3 sm:p-4"><p class="text-[8px] sm:text-[10px] uppercase tracking-[0.2em] text-neutral-500 font-bold">${label}</p><p class="text-2xl sm:text-3xl font-black mt-1 sm:mt-2">${value}</p></div>
       `).join('');
+
+      const alertEl = document.getElementById('low-stock-alert');
+      if (lowStock > 0) {
+        alertEl.innerHTML = `<div class="rounded-2xl border border-red-200 bg-red-50 p-3 sm:p-4"><p class="font-bold text-sm text-red-700">${t('lowStockTitle')}</p><div class="mt-2 space-y-1 text-xs sm:text-sm text-red-600">${state.lowStockItems.slice(0, 10).map((item) => `<p>• ${item.productName} - ${item.color} / ${item.size}: <strong>${item.stock}</strong></p>`).join('')}</div></div>`;
+      } else {
+        alertEl.innerHTML = `<div class="rounded-2xl border border-green-200 bg-green-50 p-3 sm:p-4 text-sm text-green-700 font-semibold">${t('noLowStock')}</div>`;
+      }
+
+      const recentOrdersEl = document.getElementById('recent-orders-overview');
+      const recent = state.orders.slice(0, 5);
+      if (recent.length) {
+        recentOrdersEl.innerHTML = `<p class="text-sm font-bold mb-2">${t('recentOrdersTitle')}</p><div class="space-y-2">${recent.map((o) => `<div class="rounded-xl border border-neutral-200 bg-white p-2 sm:p-3 text-xs sm:text-sm flex justify-between"><span>#${o.id} - ${o.customerName || o.customerEmail}</span><span>${toCurrency(o.total)}</span></div>`).join('')}</div>`;
+      } else {
+        recentOrdersEl.innerHTML = '';
+      }
     }
 
     function createVariantRow(data = {}) {
       const template = document.getElementById('variant-template');
       const node = template.content.firstElementChild.cloneNode(true);
-
       const colorInput = node.querySelector('.variant-color');
       const sizeInput = node.querySelector('.variant-size');
       const stockInput = node.querySelector('.variant-stock');
       const priceInput = node.querySelector('.variant-price');
-      const photoFileInput = node.querySelector('.variant-photo-file');
-      const photoUrlInput = node.querySelector('.variant-photo-url');
-      const preview = node.querySelector('.variant-preview');
-
       colorInput.value = data.color || '';
       sizeInput.value = data.size || '';
       stockInput.value = Number.isFinite(Number(data.stock)) ? Number(data.stock) : 0;
       priceInput.value = Number.isFinite(Number(data.price)) ? Number(data.price) : Number(document.getElementById('product-price').value || 0);
-      photoUrlInput.value = data.photo || '';
-
-      if (photoUrlInput.value) {
-        preview.src = photoUrlInput.value;
-        preview.classList.remove('hidden');
-      }
-
-      photoFileInput.addEventListener('change', (event) => {
-        const file = event.target.files && event.target.files[0];
-        if (!file) return;
-        preview.src = URL.createObjectURL(file);
-        preview.classList.remove('hidden');
-      });
-
-      photoUrlInput.addEventListener('input', (event) => {
-        const value = event.target.value.trim();
-        if (!value) {
-          preview.classList.add('hidden');
-          preview.removeAttribute('src');
-          return;
-        }
-        preview.src = value;
-        preview.classList.remove('hidden');
-      });
-
       node.querySelector('.variant-remove').addEventListener('click', () => node.remove());
       document.getElementById('variant-list').appendChild(node);
+      document.querySelectorAll('#variant-list [data-i18n-placeholder]').forEach((el) => { el.placeholder = t(el.dataset.i18nPlaceholder); });
     }
 
     async function collectVariants() {
       const rows = Array.from(document.querySelectorAll('#variant-list > div'));
       const variants = [];
-
       for (const row of rows) {
         const color = row.querySelector('.variant-color').value.trim();
         const size = row.querySelector('.variant-size').value.trim().toUpperCase();
         const stock = Number(row.querySelector('.variant-stock').value || 0);
         const price = Number(row.querySelector('.variant-price').value || document.getElementById('product-price').value || 0);
-        const photoUrlInput = row.querySelector('.variant-photo-url').value.trim();
-        const fileInput = row.querySelector('.variant-photo-file');
-
-        let photo = photoUrlInput;
-        const file = fileInput.files && fileInput.files[0];
-        if (file) {
-          const formData = new FormData();
-          formData.append('image', file);
-          const uploaded = await api('/api/upload-image', { method: 'POST', body: formData });
-          photo = uploaded.imageUrl;
-        }
-
-        if (!color || !size || !photo) continue;
-
+        if (!color || !size) continue;
         variants.push({
-          id: `${color}-${size}`,
-          color,
-          size,
+          id: `${color}-${size}`, color, size,
           stock: Math.max(0, Math.floor(stock)),
           price: Number.isFinite(price) ? price : Number(document.getElementById('product-price').value || 0),
-          photo
+          photo: document.getElementById('product-photo-url').value.trim()
         });
       }
-
       return variants;
     }
 
@@ -460,41 +533,23 @@
       document.getElementById('product-form').reset();
       document.getElementById('product-id').value = '';
       document.getElementById('variant-list').innerHTML = '';
-      createVariantRow({ size: 'S' });
-      createVariantRow({ size: 'M' });
-      createVariantRow({ size: 'L' });
+      createVariantRow({ size: 'S' }); createVariantRow({ size: 'M' }); createVariantRow({ size: 'L' });
     }
 
     function renderProducts() {
       const body = document.getElementById('products-table');
-      if (!state.products.length) {
-        body.innerHTML = `<tr><td class="py-6 text-neutral-500" colspan="4">${t('noData')}</td></tr>`;
-        return;
-      }
-
+      if (!state.products.length) { body.innerHTML = `<tr><td class="py-4 sm:py-6 text-neutral-500 text-xs sm:text-sm" colspan="4">${t('noData')}</td></tr>`; return; }
       body.innerHTML = state.products.map((product) => {
         const stock = Number(product.stock || 0);
         const soldOut = stock <= 0 || product.soldOut;
-        return `
-          <tr>
-            <td class="py-4 pr-3">
-              <p class="font-semibold">${displayProductName(product)}</p>
-              <p class="text-xs text-neutral-500">${product.variants.length} variants</p>
-            </td>
-            <td class="py-4">${soldOut ? `<span class="text-red-600 font-semibold">${t('soldOut')}</span>` : stock}</td>
-            <td class="py-4">${toCurrency(product.price)}</td>
-            <td class="py-4 text-right space-x-2">
-              <button data-edit="${product.id}" class="px-3 py-1.5 rounded-full bg-neutral-900 text-white text-xs font-semibold">${t('edit')}</button>
-              <button data-delete="${product.id}" class="px-3 py-1.5 rounded-full border border-neutral-300 text-xs font-semibold">${t('delete')}</button>
-            </td>
-          </tr>
-        `;
+        const variantStockHtml = (product.variants || []).map((v) => `<span class="inline-block px-1.5 py-0.5 rounded-full border border-neutral-200 text-[9px] sm:text-[10px] mr-1 mb-1 ${Number(v.stock) <= 5 ? 'bg-red-50 border-red-300 text-red-700' : ''}">${v.color}/${v.size}: <strong>${v.stock}</strong></span>`).join('');
+        return `<tr><td class="py-3 sm:py-4 pr-1 sm:pr-3"><p class="font-semibold text-xs sm:text-sm">${displayProductName(product)}</p><p class="text-[10px] sm:text-xs text-neutral-500">${product.variants.length} variants</p></td><td class="py-3 sm:py-4 pr-1 sm:pr-3 hidden sm:table-cell"><div class="flex flex-wrap">${variantStockHtml || stock}</div></td><td class="py-3 sm:py-4 text-xs sm:text-sm">${toCurrency(product.price)}</td><td class="py-3 sm:py-4 text-right"><button data-edit="${product.id}" class="px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-neutral-900 text-white text-[10px] sm:text-xs font-semibold mr-1">${t('edit')}</button><button data-delete="${product.id}" class="px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border border-neutral-300 text-[10px] sm:text-xs font-semibold">${t('delete')}</button></td></tr>`;
       }).join('');
 
       document.querySelectorAll('[data-edit]').forEach((btn) => {
         btn.addEventListener('click', () => {
           if (!twoStepConfirm('confirmEditProduct')) return;
-          const product = state.products.find((entry) => String(entry.id) === btn.dataset.edit);
+          const product = state.products.find((e) => String(e.id) === btn.dataset.edit);
           if (!product) return;
           document.getElementById('product-id').value = product.id;
           document.getElementById('product-name-zh').value = product.nameZh || '';
@@ -504,315 +559,191 @@
           document.getElementById('product-desc').value = product.desc || product.nameEn || product.nameZh || '';
           document.getElementById('product-size-chart').value = product.sizeChart || '';
           document.getElementById('product-washing-info').value = product.washingInfo || '';
+          document.getElementById('product-photo-url').value = product.photo || '';
+          populateCategorySelect(product.category || '');
           document.getElementById('variant-list').innerHTML = '';
-          (product.variants || []).forEach((variant) => createVariantRow(variant));
+          (product.variants || []).forEach((v) => createVariantRow(v));
           activateTab('products');
         });
       });
-
       document.querySelectorAll('[data-delete]').forEach((btn) => {
-        btn.addEventListener('click', async () => {
+        btn.addEventListener('click', () => {
           if (!twoStepConfirm('confirmDeleteProduct')) return;
-          await api(`/api/products/${btn.dataset.delete}`, { method: 'DELETE' });
-          await loadAdminData();
+          showPasswordModal(async () => {
+            await api(`/api/products/${btn.dataset.delete}`, { method: 'DELETE' });
+            await loadAdminData();
+          });
         });
       });
     }
 
     function renderOrders() {
       const body = document.getElementById('orders-table');
-      if (!state.orders.length) {
-        body.innerHTML = `<tr><td class="py-6 text-neutral-500" colspan="7">${t('noData')}</td></tr>`;
-        return;
-      }
+      if (!state.orders.length) { body.innerHTML = `<tr><td class="py-4 sm:py-6 text-neutral-500 text-xs sm:text-sm" colspan="7">${t('noData')}</td></tr>`; return; }
 
       body.innerHTML = state.orders.map((order) => {
-        const itemsText = (order.items || []).map((item) => `${item.desc || item.productTitle || `#${item.id}`} x${item.qty || 1}`).join(', ');
-        return `
-          <tr>
-            <td class="py-4 pr-3">#${order.id}<br><span class="text-xs text-neutral-500">${toCurrency(order.total)}</span></td>
-            <td class="py-4 pr-3">${order.customerName || '-'}<br><span class="text-xs text-neutral-500">${order.customerEmail || ''} ${order.customerPhone ? `• ${order.customerPhone}` : ''}</span></td>
-            <td class="py-4 pr-3 text-xs text-neutral-600">${itemsText || '-'}</td>
-            <td class="py-4 pr-3 text-xs text-neutral-600">${order.shippingAddress || '-'}</td>
-            <td class="py-4">
-              <div class="space-y-2">
-                <select data-status="${order.id}" class="w-full rounded-xl border border-neutral-300 px-2 py-1 text-xs">${statusOptions(order.status || 'pending')}</select>
-                <select data-payment="${order.id}" class="w-full rounded-xl border border-neutral-300 px-2 py-1 text-xs">${statusOptions(order.paymentStatus || 'pending')}</select>
-              </div>
-            </td>
-            <td class="py-4">
-              <input data-track="${order.id}" type="text" class="w-full rounded-xl border border-neutral-300 px-2 py-1 text-xs" value="${order.trackingNumber || ''}" placeholder="SF123..." />
-            </td>
-            <td class="py-4 text-right">
-              <button data-save-order="${order.id}" class="px-3 py-1.5 rounded-full bg-black text-white text-xs font-semibold">${t('save')}</button>
-            </td>
-          </tr>
-        `;
+        const itemsText = (order.items || []).map((item) => `${item.desc || '#' + item.id} x${item.qty || 1}`).join(', ');
+        return `<tr><td class="py-3 sm:py-4 pr-1 sm:pr-3 text-xs sm:text-sm">#${order.id}<br><span class="text-[10px] sm:text-xs text-neutral-500">${toCurrency(order.total)}</span></td><td class="py-3 sm:py-4 pr-1 sm:pr-3 text-xs sm:text-sm hidden sm:table-cell">${order.customerName || '-'}<br><span class="text-[10px] sm:text-xs text-neutral-500">${order.customerEmail || ''}</span></td><td class="py-3 sm:py-4 pr-1 sm:pr-3 text-[10px] sm:text-xs text-neutral-600 hidden sm:table-cell">${itemsText || '-'}</td><td class="py-3 sm:py-4 pr-1 sm:pr-3 text-[10px] sm:text-xs text-neutral-600 hidden sm:table-cell">${order.shippingAddress || '-'}</td><td class="py-3 sm:py-4"><div class="space-y-1 sm:space-y-2"><select data-status="${order.id}" class="w-full rounded-xl border border-neutral-300 px-1 sm:px-2 py-1 text-[10px] sm:text-xs">${statusOptions(order.status || 'pending')}</select><select data-payment="${order.id}" class="w-full rounded-xl border border-neutral-300 px-1 sm:px-2 py-1 text-[10px] sm:text-xs">${statusOptions(order.paymentStatus || 'pending')}</select><input data-track="${order.id}" type="text" class="w-full rounded-xl border border-neutral-300 px-1 sm:px-2 py-1 text-[10px] sm:text-xs" value="${order.trackingNumber || ''}" placeholder="SF123..." /></div></td><td class="py-3 sm:py-4 text-right"><button data-save-order="${order.id}" class="px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-black text-white text-[10px] sm:text-xs font-semibold mb-1">${t('save')}</button><button data-delete-order="${order.id}" class="px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border border-red-300 text-red-600 text-[10px] sm:text-xs font-semibold">${t('deleteOrder')}</button></td></tr>`;
       }).join('');
 
       document.querySelectorAll('[data-save-order]').forEach((btn) => {
-        btn.addEventListener('click', async () => {
+        btn.addEventListener('click', () => {
           if (!twoStepConfirm('confirmSaveOrder')) return;
-          const id = btn.dataset.saveOrder;
-          const status = document.querySelector(`[data-status="${id}"]`).value;
-          const paymentStatus = document.querySelector(`[data-payment="${id}"]`).value;
-          const trackingNumber = document.querySelector(`[data-track="${id}"]`).value.trim();
-          await api(`/api/orders/${id}`, {
-            method: 'PATCH',
-            body: JSON.stringify({ status, paymentStatus, trackingNumber })
+          showPasswordModal(async () => {
+            const id = btn.dataset.saveOrder;
+            const status = document.querySelector(`[data-status="${id}"]`).value;
+            const paymentStatus = document.querySelector(`[data-payment="${id}"]`).value;
+            const trackingNumber = document.querySelector(`[data-track="${id}"]`).value.trim();
+            await api(`/api/orders/${id}`, { method: 'PATCH', body: JSON.stringify({ status, paymentStatus, trackingNumber }) });
+            alert(t('orderSaved'));
+            await loadAdminData();
           });
-          alert(t('orderSaved'));
-          await loadAdminData();
+        });
+      });
+
+      document.querySelectorAll('[data-delete-order]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          if (!twoStepConfirm('confirmDeleteOrder')) return;
+          showPasswordModal(async () => {
+            await api(`/api/orders/${btn.dataset.deleteOrder}`, { method: 'DELETE' });
+            alert(t('orderDeleted'));
+            await loadAdminData();
+          });
         });
       });
     }
 
     function renderCoupons() {
       const root = document.getElementById('coupon-list');
-      if (!state.coupons.length) {
-        root.innerHTML = `<div class="rounded-xl border border-neutral-200 p-4 text-sm text-neutral-500">${t('noData')}</div>`;
-        return;
-      }
-
-      root.innerHTML = state.coupons.map((coupon) => `
-        <div class="rounded-xl border border-neutral-200 bg-white p-4">
-          <div class="flex items-start justify-between gap-3">
-            <div>
-              <p class="font-bold">${coupon.code}</p>
-              <p class="text-xs text-neutral-500">${coupon.type === 'fixed' ? `$${coupon.value}` : `${coupon.value}%`} • min ${toCurrency(coupon.minSpend || 0)} ${coupon.targetProductId ? `• Product #${coupon.targetProductId}` : ''}</p>
-              <p class="text-xs text-neutral-500 mt-1">${coupon.description || ''}</p>
-            </div>
-            <button data-delete-coupon="${coupon.code}" class="px-3 py-1.5 rounded-full border border-neutral-300 text-xs font-semibold">${t('delete')}</button>
-          </div>
-        </div>
-      `).join('');
-
+      if (!state.coupons.length) { root.innerHTML = `<div class="rounded-xl border border-neutral-200 p-3 sm:p-4 text-xs sm:text-sm text-neutral-500">${t('noData')}</div>`; return; }
+      root.innerHTML = state.coupons.map((coupon) => {
+        const activeBadge = coupon.active !== false ? '<span class="px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-[10px] font-bold">✓</span>' : '<span class="px-2 py-0.5 rounded-full bg-neutral-200 text-neutral-500 text-[10px] font-bold">✗</span>';
+        const usesInfo = coupon.usedCount != null ? `<span class="text-[10px] sm:text-xs text-neutral-500">${t('usesLabel')}: ${coupon.usedCount}${coupon.maxUses ? ` / ${coupon.maxUses}` : ''}</span>` : '';
+        return `<div class="rounded-xl border border-neutral-200 bg-white p-3 sm:p-4"><div class="flex items-start justify-between gap-2 sm:gap-3"><div><div class="flex items-center gap-2"><p class="font-bold text-sm">${coupon.code}</p>${activeBadge}</div><p class="text-[10px] sm:text-xs text-neutral-500">${coupon.type === 'fixed' ? `$${coupon.value}` : `${coupon.value}%`} • min ${toCurrency(coupon.minSpend || 0)}</p><p class="text-[10px] sm:text-xs text-neutral-500 mt-1">${coupon.description || ''} ${usesInfo}</p></div><button data-delete-coupon="${coupon.code}" class="px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border border-neutral-300 text-[10px] sm:text-xs font-semibold">${t('delete')}</button></div></div>`;
+      }).join('');
       document.querySelectorAll('[data-delete-coupon]').forEach((btn) => {
-        btn.addEventListener('click', async () => {
+        btn.addEventListener('click', () => {
           if (!twoStepConfirm('confirmDeleteCoupon')) return;
-          await api(`/api/coupons/${encodeURIComponent(btn.dataset.deleteCoupon)}`, { method: 'DELETE' });
-          await loadAdminData();
+          showPasswordModal(async () => {
+            await api(`/api/coupons/${encodeURIComponent(btn.dataset.deleteCoupon)}`, { method: 'DELETE' });
+            await loadAdminData();
+          });
         });
       });
     }
 
     function renderStaff() {
       const root = document.getElementById('staff-list');
-      if (!state.staff.length) {
-        root.innerHTML = `<div class="rounded-xl border border-neutral-200 p-4 text-sm text-neutral-500">${t('noData')}</div>`;
-        return;
-      }
-
+      if (!state.staff.length) { root.innerHTML = `<div class="rounded-xl border border-neutral-200 p-3 sm:p-4 text-xs sm:text-sm text-neutral-500">${t('noData')}</div>`; return; }
       root.innerHTML = state.staff.map((member) => `
-        <div class="rounded-xl border border-neutral-200 bg-white p-4 flex items-start justify-between gap-3">
-          <div>
-            <p class="font-semibold">${member.name || '-'}</p>
-            <p class="text-xs text-neutral-500">${member.email} • ${member.role}</p>
-          </div>
-          ${member.role === 'owner' ? '' : `<button data-remove-staff="${member.id}" class="px-3 py-1.5 rounded-full border border-neutral-300 text-xs font-semibold">${t('delete')}</button>`}
-        </div>
-      `).join('');
-
+        <div class="rounded-xl border border-neutral-200 bg-white p-3 sm:p-4 flex items-start justify-between gap-2 sm:gap-3">
+          <div><p class="font-semibold text-sm">${member.name || '-'}</p><p class="text-[10px] sm:text-xs text-neutral-500">${member.email} • ${member.role}</p></div>
+          ${member.role === 'owner' ? '' : `<button data-remove-staff="${member.id}" class="px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border border-neutral-300 text-[10px] sm:text-xs font-semibold">${t('delete')}</button>`}
+        </div>`).join('');
       document.querySelectorAll('[data-remove-staff]').forEach((btn) => {
-        btn.addEventListener('click', async () => {
+        btn.addEventListener('click', () => {
           if (!twoStepConfirm('confirmDeleteStaff')) return;
-          await api(`/api/admin/staff/${btn.dataset.removeStaff}`, { method: 'DELETE' });
-          await loadAdminData();
+          showPasswordModal(async () => { await api(`/api/admin/staff/${btn.dataset.removeStaff}`, { method: 'DELETE' }); await loadAdminData(); });
         });
       });
     }
 
     async function loadAdminData() {
       if (!state.adminToken) return;
-      const [products, orders, users, coupons, shippingRules, staff] = await Promise.all([
-        api('/api/products'),
-        api('/api/admin/orders'),
-        api('/api/users'),
-        api('/api/coupons'),
-        api('/api/shipping-rules'),
-        api('/api/admin/staff')
+      const [products, orders, users, coupons, shippingRules, staff, categories, lowStock] = await Promise.all([
+        api('/api/products'), api('/api/admin/orders'), api('/api/users'), api('/api/coupons'),
+        api('/api/shipping-rules'), api('/api/admin/staff'), api('/api/categories'), api('/api/admin/low-stock?threshold=5')
       ]);
-
-      state.products = products || [];
-      state.orders = orders || [];
-      state.users = users || [];
-      state.coupons = coupons || [];
-      state.shippingRules = shippingRules || { freeShippingThreshold: 500, defaultShippingFee: 35 };
-      state.staff = staff || [];
-
+      state.products = products || []; state.orders = orders || []; state.users = users || [];
+      state.coupons = coupons || []; state.shippingRules = shippingRules || { freeShippingThreshold: 500, defaultShippingFee: 35 };
+      state.staff = staff || []; state.categories = categories || []; state.lowStockItems = lowStock || [];
       document.getElementById('free-shipping-threshold').value = Number(state.shippingRules.freeShippingThreshold || 500);
       document.getElementById('default-shipping-fee').value = Number(state.shippingRules.defaultShippingFee || 35);
-
-      renderStats();
-      renderProducts();
-      renderOrders();
-      renderCoupons();
-      renderStaff();
+      renderStats(); renderProducts(); renderOrders(); renderCoupons(); renderStaff(); renderCategories();
     }
 
     async function loginAdmin() {
       const email = document.getElementById('gate-email').value.trim();
       const passcode = document.getElementById('gate-passcode').value.trim();
-      if (!email || !passcode) {
-        document.getElementById('gate-status').textContent = t('loginFailed');
-        return;
-      }
-
+      if (!email || !passcode) { document.getElementById('gate-status').textContent = t('loginFailed'); return; }
       try {
-        const result = await fetch('/api/admin/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, passcode })
-        }).then(async (response) => {
-          if (!response.ok) throw new Error(await response.text());
-          return response.json();
-        });
-
-        state.adminToken = result.token;
-        state.adminEmail = result.email || email;
-        localStorage.setItem('boutique-admin-token', state.adminToken);
-        localStorage.setItem('boutique-admin-email', state.adminEmail);
-
+        const base = window.API_BASE_URL !== undefined ? window.API_BASE_URL : '';
+        const result = await fetch(base + '/api/admin/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, passcode }) }).then(async (r) => { if (!r.ok) throw new Error(await r.text()); return r.json(); });
+        state.adminToken = result.token; state.adminEmail = result.email || email;
+        localStorage.setItem('boutique-admin-token', state.adminToken); localStorage.setItem('boutique-admin-email', state.adminEmail);
         document.getElementById('gate-status').textContent = t('loginSuccess');
-        unlockDashboard();
-        await loadAdminData();
-        activateTab('overview');
-      } catch (_error) {
-        document.getElementById('gate-status').textContent = t('loginFailed');
-      }
+        unlockDashboard(); await loadAdminData(); activateTab('overview');
+      } catch (_) { document.getElementById('gate-status').textContent = t('loginFailed'); }
     }
 
     function logoutAdmin() {
-      state.adminToken = '';
-      state.adminEmail = '';
-      localStorage.removeItem('boutique-admin-token');
-      localStorage.removeItem('boutique-admin-email');
-      location.reload();
+      state.adminToken = ''; state.adminEmail = '';
+      localStorage.removeItem('boutique-admin-token'); localStorage.removeItem('boutique-admin-email'); location.reload();
     }
 
     function bindEvents() {
       document.getElementById('gate-unlock').addEventListener('click', loginAdmin);
-      document.getElementById('gate-passcode').addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') loginAdmin();
-      });
-
-      document.getElementById('lang-toggle').addEventListener('click', () => {
-        state.lang = state.lang === 'zh' ? 'en' : 'zh';
-        localStorage.setItem('boutique-lang', state.lang);
-        applyLanguage();
-      });
-
+      document.getElementById('gate-passcode').addEventListener('keydown', (e) => { if (e.key === 'Enter') loginAdmin(); });
+      document.getElementById('verify-password-cancel').addEventListener('click', hidePasswordModal);
+      document.getElementById('verify-password-confirm').addEventListener('click', confirmPassword);
+      document.getElementById('verify-password-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') confirmPassword(); });
+      document.getElementById('lang-toggle').addEventListener('click', () => { state.lang = state.lang === 'zh' ? 'en' : 'zh'; localStorage.setItem('boutique-lang', state.lang); applyLanguage(); });
       document.getElementById('logout-admin').addEventListener('click', logoutAdmin);
-
-      document.querySelectorAll('.tab-btn').forEach((btn) => {
-        btn.addEventListener('click', () => activateTab(btn.dataset.tab));
-      });
-
+      document.querySelectorAll('.tab-btn').forEach((btn) => { btn.addEventListener('click', () => activateTab(btn.dataset.tab)); });
       document.getElementById('add-variant').addEventListener('click', () => createVariantRow());
       document.getElementById('reset-form').addEventListener('click', resetProductForm);
 
-      document.getElementById('product-form').addEventListener('submit', async (event) => {
-        event.preventDefault();
-        if (!state.adminToken) {
-          alert(t('authRequired'));
-          return;
-        }
+      document.getElementById('product-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!state.adminToken) { alert(t('authRequired')); return; }
         if (!twoStepConfirm('confirmSaveProduct')) return;
-
         const variants = await collectVariants();
         const nameZh = document.getElementById('product-name-zh').value.trim();
         const nameEn = document.getElementById('product-name-en').value.trim();
-        const payload = {
-          nameZh,
-          nameEn,
-          desc: document.getElementById('product-desc').value.trim() || nameEn || nameZh,
-          title: nameEn || nameZh,
-          price: Number(document.getElementById('product-price').value || 0),
-          seenAt: document.getElementById('product-seen-at').value.trim(),
-          sizeChart: document.getElementById('product-size-chart').value.trim(),
-          washingInfo: document.getElementById('product-washing-info').value.trim(),
-          photo: variants[0]?.photo || '',
-          variants,
-          sizes: [...new Set(variants.map((entry) => entry.size))]
-        };
-
+        const payload = { nameZh, nameEn, desc: document.getElementById('product-desc').value.trim() || nameEn || nameZh, title: nameEn || nameZh, category: document.getElementById('product-category').value, price: Number(document.getElementById('product-price').value || 0), seenAt: document.getElementById('product-seen-at').value.trim(), sizeChart: document.getElementById('product-size-chart').value.trim(), washingInfo: document.getElementById('product-washing-info').value.trim(), photo: document.getElementById('product-photo-url').value.trim(), variants, sizes: [...new Set(variants.map((v) => v.size))] };
         const productId = document.getElementById('product-id').value;
-        if (productId) {
-          await api(`/api/products/${productId}`, { method: 'PUT', body: JSON.stringify(payload) });
-        } else {
-          await api('/api/products', { method: 'POST', body: JSON.stringify(payload) });
-        }
-
-        alert(t('productSaved'));
-        resetProductForm();
-        await loadAdminData();
+        if (productId) { await api(`/api/products/${productId}`, { method: 'PUT', body: JSON.stringify(payload) }); }
+        else { await api('/api/products', { method: 'POST', body: JSON.stringify(payload) }); }
+        alert(t('productSaved')); resetProductForm(); await loadAdminData();
       });
 
-      document.getElementById('coupon-form').addEventListener('submit', async (event) => {
-        event.preventDefault();
+      document.getElementById('coupon-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
         if (!twoStepConfirm('confirmSaveCoupon')) return;
-        const payload = {
-          code: document.getElementById('coupon-code').value.trim().toUpperCase(),
-          type: document.getElementById('coupon-type').value,
-          value: Number(document.getElementById('coupon-value').value || 0),
-          minSpend: Number(document.getElementById('coupon-min-spend').value || 0),
-          targetProductId: document.getElementById('coupon-target-product').value ? Number(document.getElementById('coupon-target-product').value) : null,
-          description: document.getElementById('coupon-desc').value.trim(),
-          active: true
-        };
-
+        const payload = { code: document.getElementById('coupon-code').value.trim().toUpperCase(), type: document.getElementById('coupon-type').value, value: Number(document.getElementById('coupon-value').value || 0), minSpend: Number(document.getElementById('coupon-min-spend').value || 0), maxUses: Number(document.getElementById('coupon-max-uses').value || 0), description: document.getElementById('coupon-desc').value.trim(), active: true };
         await api('/api/coupons', { method: 'POST', body: JSON.stringify(payload) });
-        alert(t('couponSaved'));
-        document.getElementById('coupon-form').reset();
-        await loadAdminData();
+        alert(t('couponSaved')); document.getElementById('coupon-form').reset(); await loadAdminData();
       });
 
-      document.getElementById('shipping-form').addEventListener('submit', async (event) => {
-        event.preventDefault();
+      document.getElementById('shipping-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
         if (!twoStepConfirm('confirmSaveShipping')) return;
-        const payload = {
-          freeShippingThreshold: Number(document.getElementById('free-shipping-threshold').value || 0),
-          defaultShippingFee: Number(document.getElementById('default-shipping-fee').value || 0)
-        };
-        await api('/api/shipping-rules', { method: 'PUT', body: JSON.stringify(payload) });
-        alert(t('shippingSaved'));
-        await loadAdminData();
+        await api('/api/shipping-rules', { method: 'PUT', body: JSON.stringify({ freeShippingThreshold: Number(document.getElementById('free-shipping-threshold').value || 0), defaultShippingFee: Number(document.getElementById('default-shipping-fee').value || 0) }) });
+        alert(t('shippingSaved')); await loadAdminData();
       });
 
-      document.getElementById('staff-form').addEventListener('submit', async (event) => {
-        event.preventDefault();
+      document.getElementById('staff-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
         if (!twoStepConfirm('confirmAddStaff')) return;
-        const payload = {
-          email: document.getElementById('staff-email').value.trim(),
-          password: document.getElementById('staff-password').value,
-          name: document.getElementById('staff-name').value.trim(),
-          role: document.getElementById('staff-role').value
-        };
+        await api('/api/admin/staff', { method: 'POST', body: JSON.stringify({ email: document.getElementById('staff-email').value.trim(), password: document.getElementById('staff-password').value, name: document.getElementById('staff-name').value.trim(), role: document.getElementById('staff-role').value }) });
+        alert(t('staffAdded')); document.getElementById('staff-form').reset(); await loadAdminData();
+      });
 
-        await api('/api/admin/staff', { method: 'POST', body: JSON.stringify(payload) });
-        alert(t('staffAdded'));
-        document.getElementById('staff-form').reset();
-        await loadAdminData();
+      document.getElementById('category-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!twoStepConfirm('confirmSaveCategory')) return;
+        await api('/api/categories', { method: 'POST', body: JSON.stringify({ nameZh: document.getElementById('category-name-zh').value.trim(), nameEn: document.getElementById('category-name-en').value.trim() }) });
+        alert(t('categorySaved')); document.getElementById('category-form').reset(); await loadAdminData();
       });
     }
 
     async function init() {
-      bindEvents();
-      resetProductForm();
-      applyLanguage();
-
+      bindEvents(); resetProductForm(); applyLanguage();
       if (state.adminToken) {
-        try {
-          await api('/api/admin/session');
-          unlockDashboard();
-          await loadAdminData();
-          activateTab('overview');
-        } catch (_error) {
-          logoutAdmin();
-        }
+        try { await api('/api/admin/session'); unlockDashboard(); await loadAdminData(); activateTab('overview'); }
+        catch (_) { logoutAdmin(); }
       }
     }
-
     window.addEventListener('DOMContentLoaded', init);
   </script>
 </body>

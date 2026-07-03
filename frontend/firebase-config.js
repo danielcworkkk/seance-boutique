@@ -8,3 +8,9 @@ window.FIREBASE_CONFIG = {
   messagingSenderId: "975272130915",
   appId: "1:975272130915:web:8ea7267b9e86a6efdf7b56"
 };
+
+// Backend API URL.
+// - Leave "" when the Express server serves both frontend and API (localhost / localtunnel / Render).
+// - Set to the backend URL when frontend is hosted separately (e.g. Firebase Hosting).
+//   Example: "https://warm-humans-fix.loca.lt" or "https://seance-boutique-api.onrender.com"
+window.API_BASE_URL = "";

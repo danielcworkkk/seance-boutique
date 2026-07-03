@@ -93,6 +93,7 @@ function normalizeProduct(product) {
   if (!product || typeof product !== "object") return null;
   const normalizedNameZh = String(product.nameZh || "").trim();
   const normalizedNameEn = String(product.nameEn || product.title || product.desc || "").trim();
+  const normalizedCategory = String(product.category || "").trim();
   const normalizedDesc = String(product.desc || normalizedNameEn || normalizedNameZh).trim();
   const sizes = Array.isArray(product.sizes) && product.sizes.length
     ? product.sizes.map((entry) => String(entry).trim().toUpperCase()).filter(Boolean)
@@ -128,6 +129,7 @@ function normalizeProduct(product) {
     nameZh: normalizedNameZh,
     nameEn: normalizedNameEn,
     desc: normalizedDesc,
+    category: normalizedCategory,
     sizes,
     seenAt: String(product.seenAt || "").trim(),
     sizeChart: String(product.sizeChart || "").trim(),
@@ -170,6 +172,7 @@ async function readStore() {
   store.paymentQr = store.paymentQr || {};
   store.coupons = Array.isArray(store.coupons) ? store.coupons.map(normalizeCoupon).filter(Boolean) : [];
   store.adminStaff = Array.isArray(store.adminStaff) ? store.adminStaff : [];
+  store.categories = Array.isArray(store.categories) ? store.categories : [];
   store.shippingRules = store.shippingRules || {
     freeShippingThreshold: 500,
     defaultShippingFee: 35
@@ -388,6 +391,47 @@ app.get("/api/store", async (_req, res) => {
     res.json(store);
   } catch (_error) {
     res.status(500).json({ error: "Failed to load store data" });
+  }
+});
+
+app.get("/api/admin/low-stock", requireAdmin, async (req, res) => {
+  try {
+    const threshold = Number(req.query.threshold) || 5;
+    const store = await readStore();
+    const lowStockItems = [];
+    for (const product of store.products) {
+      for (const variant of (product.variants || [])) {
+        if (Number(variant.stock || 0) <= threshold) {
+          lowStockItems.push({
+            productId: product.id,
+            productName: product.nameZh || product.nameEn || product.desc,
+            variantId: variant.id,
+            color: variant.color,
+            size: variant.size,
+            stock: variant.stock
+          });
+        }
+      }
+    }
+    res.json(lowStockItems);
+  } catch (_error) {
+    res.status(500).json({ error: "Failed to load low stock" });
+  }
+});
+
+app.delete("/api/orders/:id", requireAdmin, async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const store = await readStore();
+    const before = store.orders.length;
+    store.orders = store.orders.filter((entry) => Number(entry.id) !== id);
+    if (store.orders.length === before) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+    await writeStore(store);
+    return res.status(204).send();
+  } catch (_error) {
+    return res.status(500).json({ error: "Failed to delete order" });
   }
 });
 
@@ -616,6 +660,56 @@ app.post("/api/users/profile", async (req, res) => {
   }
 });
 
+/* ---------- Categories ---------- */
+
+app.get("/api/categories", async (_req, res) => {
+  try {
+    const store = await readStore();
+    res.json(store.categories || []);
+  } catch (_error) {
+    res.status(500).json({ error: "Failed to load categories" });
+  }
+});
+
+app.post("/api/categories", requireAdmin, async (req, res) => {
+  try {
+    const nameZh = String(req.body.nameZh || "").trim();
+    const nameEn = String(req.body.nameEn || "").trim();
+    if (!nameZh && !nameEn) {
+      return res.status(400).json({ error: "Category name is required" });
+    }
+    const store = await readStore();
+    const category = {
+      id: Date.now(),
+      nameZh,
+      nameEn
+    };
+    store.categories.unshift(category);
+    await writeStore(store);
+    return res.status(201).json(category);
+  } catch (_error) {
+    return res.status(500).json({ error: "Failed to create category" });
+  }
+});
+
+app.delete("/api/categories/:id", requireAdmin, async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const store = await readStore();
+    const before = store.categories.length;
+    store.categories = store.categories.filter((entry) => Number(entry.id) !== id);
+    if (store.categories.length === before) {
+      return res.status(404).json({ error: "Category not found" });
+    }
+    await writeStore(store);
+    return res.status(204).send();
+  } catch (_error) {
+    return res.status(500).json({ error: "Failed to delete category" });
+  }
+});
+
+/* ---------- Products ---------- */
+
 app.post("/api/products", requireAdmin, async (req, res) => {
   try {
     const payload = normalizeProduct(req.body);
@@ -673,6 +767,8 @@ app.delete("/api/products/:id", requireAdmin, async (req, res) => {
     return res.status(500).json({ error: "Failed to delete product" });
   }
 });
+
+/* ---------- Orders ---------- */
 
 app.post("/api/orders", async (req, res) => {
   try {
@@ -763,6 +859,8 @@ app.patch("/api/orders/:id", requireAdmin, async (req, res) => {
   }
 });
 
+/* ---------- Coupons ---------- */
+
 app.post("/api/coupons", requireAdmin, async (req, res) => {
   try {
     const payload = normalizeCoupon(req.body);
@@ -823,6 +921,8 @@ app.delete("/api/coupons/:code", requireAdmin, async (req, res) => {
     return res.status(500).json({ error: "Failed to delete coupon" });
   }
 });
+
+/* ---------- Shipping ---------- */
 
 app.put("/api/shipping-rules", requireAdmin, async (req, res) => {
   try {
